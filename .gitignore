@@ -44,4 +44,4 @@ src/**/*.dirstamp
 # startup item
 # src/gdash.exe
 #
-src/gdash.exe
+##src/gdash.exe

@@ -1,0 +1,26 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "MAKE",
+      "appliesTo": "*.cpp,*.hpp,*.*",
+      "type": "command",
+      "command": "${env.COMSPEC}",
+      "args": [ "make" ]
+    },
+    {
+      "taskLabel": "MAKE CLEAN",
+      "appliesTo": "*.cpp,*.hpp,*.*",
+      "type": "command",
+      "command": "${env.COMSPEC}",
+      "args": [ "make clean" ]
+    },
+    {
+      "taskLabel": "TOUCH",
+      "appliesTo": "*.cpp,*.hpp,*.*",
+      "type": "command",
+      "command": "${env.COMSPEC}",
+      "args": [ "touch ${file} | echo touch ${file}" ]
+    }
+  ]
+}
