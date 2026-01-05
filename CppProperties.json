@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "inheritEnvironments": [
+        "mingw_64"
+      ],
+      "name": "ucrt64",
+      "includePath": [
+        "${env.INCLUDE}",
+        "${workspaceRoot}\\**",
+        "C:/msys64/ucrt64/include/glib-2.0/**",
+        "C:/msys64/ucrt64/lib/glib-2.0/include/**",
+        "C:/msys64/ucrt64/include/gtk-3.0/**",
+        "C:/msys64/ucrt64/include/pango-1.0/**",
+        "C:/msys64/ucrt64/include/harfbuzz/**",
+        "C:/msys64/ucrt64/include/cairo/**",
+        "C:/msys64/ucrt64/include/gdk-pixbuf-2.0/**",
+        "C:/msys64/ucrt64/include/atk-1.0/**",
+        "C:/msys64/ucrt64/include/**"
+      ],
+      "intelliSenseMode": "linux-gcc-x64",
+      "environments": [
+        {
+          "MINGW64_ROOT": "C:\\msys64\\ucrt64",
+          "BIN_ROOT": "${env.MINGW64_ROOT}\\bin",
+          "FLAVOR": "x86_64-w64-mingw32",
+          "TOOLSET_VERSION": "9.1.0",
+          "PATH": "${env.BIN_ROOT};${env.MINGW64_ROOT}\\..\\usr\\local\\bin;${env.MINGW64_ROOT}\\..\\usr\\bin;${env.MINGW64_ROOT}\\..\\bin;${env.PATH}",
+          "INCLUDE": "${env.MINGW64_ROOT}\\include\\c++\\${env.TOOLSET_VERSION};${env.MINGW64_ROOT}\\include\\c++\\${env.TOOLSET_VERSION}\\tr1;${env.MINGW64_ROOT}\\include\\c++\\${env.TOOLSET_VERSION}\\${env.FLAVOR}",
+          "environment": "mingw_64"
+        }
+      ]
+    }
+  ]
+}
