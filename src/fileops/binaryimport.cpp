@@ -795,6 +795,14 @@ std::vector<unsigned char> load_memory_dump(unsigned char const *file, size_t le
         return memory;
     }
 
+    /* or maybe a 64k map saved by emu64. read it. */
+    if (length == 65535) {
+        memcpy(&memory[0], file, 65535);
+        memory[65535] = 0;
+        gd_debug("%s is maybe an emu64 memory map.");
+        return memory;
+    }
+
     throw std::runtime_error(
         "Memory map file should be 65536+2 bytes long or 65536 bytes long. "
         "Use save \"filename\" 0 0000 ffff in vice monitor. "

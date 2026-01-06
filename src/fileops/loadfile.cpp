@@ -86,7 +86,7 @@ CaveSet create_from_buffer(const unsigned char *buffer, int length, char const *
 
     /* if could not determine file format so far, try to load as a snapshot file */
     if (g_str_has_suffix(filename, ".vsf") || g_str_has_suffix(filename, ".VSF")
-            || length == 65536 || length == 65538) {
+            || length == 65535 || length == 65536 || length == 65538) {
         std::vector<unsigned char> memory = load_memory_dump(buffer, length);
         std::vector<unsigned char> imported = gdash_binary_import(memory);
         return create_from_buffer(&imported[0], imported.size(), filename);
