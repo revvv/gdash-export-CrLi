@@ -58,16 +58,18 @@
 
 char const *C64Import::gd_format_strings[GD_FORMAT_UNKNOWN + 1] = {
     /* these strings should come in the same order as the enum */
-    "GDashBD1",
-    "GDashB1A",
-    "GDashBD2",
-    "GDashB2A",
-    "GDashPLC",
-    "GDashPCA",
-    "GDashDLB",
-    "GDashCRL",
-    "GDashCD7",
-    "GDash1ST",
+    "GDashBD1",     // GD_FORMAT_BD1
+    "GDashB1A",     // GD_FORMAT_BD1_ATARI
+    "GDashBD2",     // GD_FORMAT_BD2
+    "GDashB2A",     // GD_FORMAT_BD2_ATARI
+    "GDashPLC",     // GD_FORMAT_PLC
+    "GDashPCA",     // GD_FORMAT_PLC_ATARI
+    "GDashDLB",     // GD_FORMAT_DLB
+    "GDashCRL",     // GD_FORMAT_CRLI
+    "GDashCD7",     // GD_FORMAT_CRDR_7
+    "GDash1ST",     // GD_FORMAT_FIRSTB
+    "GDashB1+",     // GD_FORMAT_BD1_PLUS
+    "GDashB20",     // GD_FORMAT_BD2_CADUTA
     NULL
 };
 
@@ -219,10 +221,18 @@ GdElementEnum const C64Import::import_table_crli[0x80] = {
     /* 24 */ O_PRE_DIA_5, O_INBOX, O_PRE_PL_1, O_PRE_PL_2,
     /* 28 */ O_PRE_PL_3, O_CLOCK, O_H_EXPANDING_WALL, O_H_EXPANDING_WALL_scanned,   /* CLOCK: not mentioned in marek's bd inside faq */
     /* 2c */ O_CREATURE_SWITCH, O_CREATURE_SWITCH, O_EXPANDING_WALL_SWITCH, O_EXPANDING_WALL_SWITCH,
-    /* 30 O_BUTTER_3, O_BUTTER_4, O_BUTTER_1, O_BUTTER_2, */
-    /* 34 O_BUTTER_3_scanned, O_BUTTER_4_scanned, O_BUTTER_1_scanned, O_BUTTER_2_scanned, */
-    /* 30 */ O_BUTTER_4, O_BUTTER_1, O_BUTTER_2, O_BUTTER_3, // fix order
-    /* 34 */ O_BUTTER_4_scanned, O_BUTTER_1_scanned, O_BUTTER_2_scanned, O_BUTTER_3_scanned, // fix order
+    /*-- version1 -->*/
+    // 30 // O_BUTTER_3, O_BUTTER_4, O_BUTTER_1, O_BUTTER_2,
+    // 34 // O_BUTTER_3_scanned, O_BUTTER_4_scanned, O_BUTTER_1_scanned, O_BUTTER_2_scanned,
+    /*<-- version1 --*/
+    /*-- version2 -->*/
+    // 30 // O_BUTTER_4, O_BUTTER_1, O_BUTTER_2, O_BUTTER_3, // fix order
+    // 34 // O_BUTTER_4_scanned, O_BUTTER_1_scanned, O_BUTTER_2_scanned, O_BUTTER_3_scanned, // fix order
+    /*<-- version2 --*/
+    /*-- version3 -->*/// (right "B")      // (up "b")         // (left "C")       // (down "c")
+    /* 30 */              O_BUTTER_3        , O_BUTTER_2        , O_BUTTER_1        , O_BUTTER_4,          // fix order again
+    /* 34 */              O_BUTTER_3_scanned, O_BUTTER_2_scanned, O_BUTTER_1_scanned, O_BUTTER_4_scanned,  // fix order again
+    /*<-- version3 --*/
     /* 38 */ O_STEEL, O_SLIME, O_BOMB, O_SWEET,
     /* 3c */ O_PRE_STONE_1, O_PRE_STONE_2, O_PRE_STONE_3, O_PRE_STONE_4,
     /* 40 */ O_BLADDER, O_BLADDER_1, O_BLADDER_2, O_BLADDER_3,
@@ -654,8 +664,10 @@ int C64Import::cave_copy_from_bd1(CaveStored &cave, const guint8 *data, int rema
             import_func_byte = deluxecaves_3_import_byte;
             break;
         case Masters_Boulder:
-        case Crazy_Dream_1: /* avoid warning */
-        case None:
+        case Crazy_Dream_1:
+        case BoulderDashPlus:
+        case BoulderDashCaduta:
+        case None:                  /* avoid warning */
             /* original bd1 */
             break;
         case Crazy_Dream_7:
@@ -761,6 +773,24 @@ int C64Import::cave_copy_from_bd1(CaveStored &cave, const guint8 *data, int rema
                     cave.objects.push_back(CavePoint(Coordinate(pos % 40, pos / 40), element));
                 }
             index += 8;
+        } else if (hack == BoulderDashPlus && code == 0xFE) {  /* 0xFE - raster, used in BoulderDash+ */
+            /* like above but dont modiy dy, create points instead */
+            int el = data[index + 1];   el=el;   // avoid warning
+            int x1 = data[index + 2];
+            int y1 = data[index + 3] - 2;
+            int nx = data[index + 4];
+            int ny = data[index + 5];
+            int dx = data[index + 6];
+            int dy = data[index + 7];
+            GdElementEnum element = import_func(data, index + 1);
+
+            for (int y = 0; y < ny; y++)
+                for (int x = 0; x < nx; x++) {
+                    int pos = x1 + y1 * 40 + y * dy * 40 + x * dx;
+                    Coordinate p(pos % 40, pos / 40);
+                    cave.objects.push_back(CavePoint(p, element));
+                }
+            index += 8;
         } else {
             /* object is code&3f, object type is upper 2 bits */
             GdElementEnum element = import_func_byte(code & 0x3F, index);
@@ -833,7 +863,7 @@ int C64Import::cave_copy_from_bd1(CaveStored &cave, const guint8 *data, int rema
 
 /// Import bd2 cave data into our format.
 /// Very similar to the bd1 importer, only the encoding was different.
-int C64Import::cave_copy_from_bd2(CaveStored &cave, const guint8 *data, int remaining_bytes, GdCavefileFormat format) {
+int C64Import::cave_copy_from_bd2(CaveStored &cave, const guint8 *data, int remaining_bytes, GdCavefileFormat format, ImportHack hack) {
     g_assert(format == GD_FORMAT_BD2 || format == GD_FORMAT_BD2_ATARI);
 
     SetLoggerContextForFunction scf(cave.name);
@@ -1016,6 +1046,60 @@ int C64Import::cave_copy_from_bd2(CaveStored &cave, const guint8 *data, int rema
                 index += 3 + n;
             }
             break;
+            case 0x08 :
+                if(hack == BoulderDashCaduta) {
+                    int amount = data[index + 1];
+                    int x   = data[index + 3];
+                    int y   = data[index + 2];
+                    // int lsb = data[index + 4];  // only for completeness
+                    // int msb = data[index + 5];  // only for completeness
+                    // data start after 
+                    int didx = index + 6;
+                    int ppos = y * 40 + x;
+                    int x1   = 0;
+                    int y1   = 0;
+                    GdElementEnum element = O_UNKNOWN;
+
+                    for(int n=0; n<amount; n++) {
+                        guint8 obj = data[didx + n];
+
+                        {
+                            element = bd1_import_byte(obj, didx + n);   // obj, index only for logging
+                            x1 = ppos % 40;
+                            y1 = ppos / 40;
+                            Coordinate p(x1, y1);
+                            cave.objects.push_back(CavePoint(p, element));
+                            ppos++;
+                        }
+
+                        obj += 0x34;   // see code $AC0B .. $AC2C in dump // what the heck do this?
+
+                        {
+                            element = bd1_import_byte(obj, didx + n);   // index only for logging
+                            x1 = ppos % 40;
+                            y1 = ppos / 40;
+                            Coordinate p(x1, y1);
+                            cave.objects.push_back(CavePoint(p, element));
+                            ppos++;
+                        }
+                    }
+                    break;
+                } else {
+                    // fallthrough
+                }
+            case 0x14 :
+                if(hack == BoulderDashCaduta) {
+                    /* POINT */
+                    GdElementEnum element = bd1_import(data, index + 1);
+                    Coordinate p(data[index + 3], data[index + 2]);
+                    cave.objects.push_back(CavePoint(p, element));
+                    // if (x1>=cave.w || y1>=cave.h)
+                    //  gd_warning("invalid point coordinates %d,%d at byte %d", x1, y1, index);
+                    index += 4;
+                    break;
+                } else {
+                    // fallthrough
+                }
             default:
                 gd_warning("unknown bd2 extension no. %02x at byte %d", unsigned(data[index]), index);
                 index += 1; /* skip that byte */
@@ -1029,7 +1113,7 @@ int C64Import::cave_copy_from_bd2(CaveStored &cave, const guint8 *data, int rema
     index++;    /* animation byte - told the engine which objects to animate - to make game faster */
 
     /* the colors from the memory dump are appended here */
-    if (format == GD_FORMAT_BD2) {
+    if (format == GD_FORMAT_BD2) {  // hack == BoulderDashCaduta 
         /* c64 colors */
         cave.colorb = GdColor::from_c64(0); /* always black */
         cave.color0 = GdColor::from_c64(0); /* always black */
@@ -2042,6 +2126,14 @@ std::vector<CaveStored> C64Import::caves_import_from_buffer(const guint8 *buf, i
         hack = Crazy_Dream_7;
     if (format == GD_FORMAT_BD1 && length == 1241 && cs == 0x926f)
         hack = Masters_Boulder;
+    if (format == GD_FORMAT_BD1_PLUS) {
+        format = GD_FORMAT_BD1;
+        hack = BoulderDashPlus;
+    }
+    if (format == GD_FORMAT_BD2_CADUTA) {
+        format = GD_FORMAT_BD2;
+        hack = BoulderDashCaduta;
+    }
 
     int bufp = 0;
     int cavenum = 0;
@@ -2053,10 +2145,12 @@ std::vector<CaveStored> C64Import::caves_import_from_buffer(const guint8 *buf, i
         cavelength = 0; /* to avoid compiler warning */
 
         switch (format) {
+            case GD_FORMAT_BD1_PLUS:        /* boulder dash plus */
             case GD_FORMAT_BD1:             /* boulder dash 1 */
             case GD_FORMAT_BD1_ATARI:       /* boulder dash 1, atari version */
             case GD_FORMAT_BD2:             /* boulder dash 2 */
-            case GD_FORMAT_BD2_ATARI:       /* boulder dash 2 */
+            case GD_FORMAT_BD2_ATARI:       /* boulder dash 2, atari version */
+            case GD_FORMAT_BD2_CADUTA:      /* boulder dash 2, caduta massi  */
                 /* these are not in the data so we guess */
                 newcave.selectable = (cavenum < 16) && (cavenum % 4 == 0);
                 newcave.intermission = cavenum > 15;
@@ -2073,7 +2167,8 @@ std::vector<CaveStored> C64Import::caves_import_from_buffer(const guint8 *buf, i
                         break;
                     case GD_FORMAT_BD2:
                     case GD_FORMAT_BD2_ATARI:
-                        cavelength = cave_copy_from_bd2(newcave, buf + bufp, length - bufp, format);
+                    case GD_FORMAT_BD2_CADUTA:
+                        cavelength = cave_copy_from_bd2(newcave, buf + bufp, length - bufp, format, hack);
                         break;
                     default:
                         g_assert_not_reached();

@@ -56,6 +56,8 @@ public:
         GD_FORMAT_CRLI,         ///<  crazy light construction kit
         GD_FORMAT_CRDR_7,       ///<  crazy dream 7
         GD_FORMAT_FIRSTB,       ///<  first boulder
+        GD_FORMAT_BD1_PLUS,     ///<  BoulderDash+
+        GD_FORMAT_BD2_CADUTA,   ///<  Caduta Massi
 
         GD_FORMAT_UNKNOWN,      ///<  unknown format
     };
@@ -70,6 +72,8 @@ public:
         Deluxe_Caves_1,
         Deluxe_Caves_3,
         Masters_Boulder,
+        BoulderDashPlus,
+        BoulderDashCaduta
     };
 
     // set some cave parameters for original c64 engines
@@ -102,7 +106,7 @@ public:
 
     // import routines
     static int cave_copy_from_bd1(CaveStored &cave, const guint8 *data, int remaining_bytes, GdCavefileFormat format, ImportHack hack);
-    static int cave_copy_from_bd2(CaveStored &cave, const guint8 *data, int remaining_bytes, GdCavefileFormat format);
+    static int cave_copy_from_bd2(CaveStored &cave, const guint8 *data, int remaining_bytes, GdCavefileFormat format, ImportHack hack);
     static int cave_copy_from_plck(CaveStored &cave, const guint8 *data, int remaining_bytes, GdCavefileFormat format);
     static int cave_copy_from_dlb(CaveStored &cave, const guint8 *data, int remaining_bytes);
     static int cave_copy_from_1stb(CaveStored &cave, const guint8 *data, int remaining_bytes);
