@@ -14,7 +14,6 @@ Levels=5
 
 [cave]
 Name=A
-Description=should now be identical with: Arno Dash 21 Cave A Remake (or undo and set in Compatibility: line shifting border)
 Intermission=false
 Size=40 22 0 0 39 21
 Colors=Black Black Red Orange White White Red
@@ -23,10 +22,11 @@ CaveTime=100 100 100 100 100
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
-DiamondValue=12 20
-SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
 TimeValue=1 1 1 1 1
+DiamondValue=12 20
+RandSeed=0 0 0 0 0
+SlimePermeabilityC64=0 0 0 0 0
+BorderProperties.lineshift=true
 
 [map]
                www.wwwwwwwwwwwwwwwww    
@@ -52,11 +52,6 @@ wwwwwwwwwwwwww  w.r..dw    w      w
   w      w  w   w...rrw                 
                www.wwwww                
 [/map]
-
-[objects]
-CopyPaste=0 13 13 20 0 12 nomirror noflip
-Point=7 11 BOULDER
-[/objects]
 [/cave]
 
 [cave]
@@ -69,11 +64,12 @@ CaveTime=160 160 160 160 160
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=10 15
+RandSeed=0 0 0 0 0
 MagicWallTime=125 125 125 125 125
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
@@ -103,7 +99,6 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 
 [cave]
 Name=C
-Description=should now be identical with: Arno Dash 21 Cave C Remake (or undo and set in Compatibility: line shifting border)
 Intermission=false
 Size=40 22 0 0 39 21
 Colors=Black Black LightBlue Cyan Yellow Yellow LightBlue
@@ -112,11 +107,12 @@ CaveTime=150 150 150 150 150
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=15 20
+RandSeed=0 0 0 0 0
 MagicWallTime=40 40 40 40 40
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
   r    ww w     ww ww  wMww w www    rr 
@@ -142,17 +138,6 @@ w www      w   ww    .    w    w  ..r Mw
 wwwwwMMwwMMwMwwwwwwwwwwwMwwwwMMwwwwwMwww
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 [/map]
-
-[objects]
-Point=0 15 SPACE
-Point=0 7 WALL
-Point=0 14 WALL
-Point=0 13 SPACE
-Point=0 12 WALL
-Point=0 9 WALL
-Point=0 10 SPACE
-Point=0 8 SPACE
-[/objects]
 [/cave]
 
 [cave]
@@ -165,12 +150,13 @@ CaveTime=170 170 170 170 170
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=30 35
+RandSeed=0 0 0 0 0
 AmoebaTime=60 60 60 60 60
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 wWWwWWWwWWWWwWWWWWWWWWWWWWWwWWWWwWWWwWWw
@@ -208,12 +194,13 @@ CaveTime=35 35 35 35 35
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=5 5 5 5 5
+TimeValue=1 1 1 1 1
 DiamondValue=16 18
+RandSeed=0 0 0 0 0
 AmoebaTime=28 28 28 28 28
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=252 252 252 252 252
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 WssssssssssssssssssWWWWWWWWWWWWWWWWWWWWW
@@ -251,11 +238,12 @@ CaveTime=175 175 175 175 175
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=6 8
+RandSeed=0 0 0 0 0
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 wwwwwwwwwwwwwWWWWWWWWWWWWWwwwwwwwwwwwwww
@@ -293,11 +281,12 @@ CaveTime=200 200 200 200 200
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=6 0
+RandSeed=0 0 0 0 0
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
         WWWWWWWWWWWWWWWWWWWWWWWW        
@@ -335,11 +324,12 @@ CaveTime=180 180 180 180 180
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=6 6 6 6 6
+TimeValue=1 1 1 1 1
 DiamondValue=12 0
+RandSeed=0 0 0 0 0
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 ..r. ..... rw..q..q r.....    ....dwd...
@@ -377,12 +367,13 @@ CaveTime=180 180 180 180 180
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=4 5
+RandSeed=0 0 0 0 0
 AmoebaTime=160 160 160 160 160
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
  W W W W W W W W W W W W W W W W W W W W
@@ -420,11 +411,12 @@ CaveTime=30 30 30 30 30
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=5 5 5 5 5
+TimeValue=1 1 1 1 1
 DiamondValue=9 0
+RandSeed=0 0 0 0 0
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 xxWWWWWWWxxWWWWWWWxxWWWWWWWWWWWWWWWWWWWW
@@ -462,11 +454,12 @@ CaveTime=160 160 160 160 160
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=8 10
+RandSeed=0 0 0 0 0
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 WW     WWW     WWW     WWW     WWW     X
@@ -504,11 +497,12 @@ CaveTime=120 120 120 120 120
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=15 0
+RandSeed=0 0 0 0 0
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 WWWWwwwwWWWWwwwwWWWWwwwwWWWWwwwwWWWWwwww
@@ -546,11 +540,12 @@ CaveTime=140 140 140 140 140
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=20 25
+RandSeed=0 0 0 0 0
 MagicWallTime=130 130 130 130 130
 SlimePermeabilityC64=240 240 240 240 240
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
  ds dwss   ssss   r ssd   rs     sssr  d
@@ -588,11 +583,12 @@ CaveTime=200 200 200 200 200
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=75 0
+RandSeed=0 0 0 0 0
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 rrrrWrW..r. WrW .r.. rWrW.WrWrWrW.WrWrrr
@@ -631,12 +627,13 @@ CaveTime=30 30 30 30 30
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=4 4 4 4 4
+TimeValue=1 1 1 1 1
 DiamondValue=6 0
+RandSeed=0 0 0 0 0
 AmoebaTime=10 10 10 10 10
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 Xa.wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
@@ -674,12 +671,13 @@ CaveTime=150 150 150 150 150
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=4 6
+RandSeed=0 0 0 0 0
 AmoebaTime=130 130 130 130 130
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
@@ -717,11 +715,12 @@ CaveTime=200 200 200 200 200
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=8 12
+RandSeed=0 0 0 0 0
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
@@ -759,11 +758,12 @@ CaveTime=200 200 200 200 200
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=5 8
+RandSeed=0 0 0 0 0
 MagicWallTime=140 140 140 140 140
 SlimePermeabilityC64=252 252 252 252 252
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 WWWWWwwwwrrrrrrrrrrwrqqWWWWWWWWWWWWWWWWW
@@ -801,13 +801,14 @@ CaveTime=180 180 180 180 180
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=8 8 8 8 8
+TimeValue=1 1 1 1 1
 DiamondValue=4 5
+RandSeed=0 0 0 0 0
 AmoebaTime=160 160 160 160 160
 MagicWallTime=0 0 0 0 0
 MagicWallProperties.convertamoeba=false
 SlimePermeabilityC64=0 0 0 0 0
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
+BorderProperties.lineshift=true
 
 [map]
 d.dd   BWqd.  d d         dddd W rddr dd
@@ -847,12 +848,12 @@ CaveTime=25 25 25 25 25
 CaveScheduling=plck
 FrameTime=160 160 160 160 160
 CaveDelay=4 4 4 4 4
+TimeValue=1 1 1 1 1
 DiamondValue=28 0
+RandSeed=0 0 0 0 0
 MagicWallTime=0 0 0 0 0
 SlimePermeabilityC64=0 0 0 0 0
 BorderProperties.lineshift=true
-RandSeed=0 0 0 0 0
-TimeValue=1 1 1 1 1
 
 [map]
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
