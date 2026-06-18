@@ -1,0 +1,12 @@
+Disk: Quolder Dash (1995)(Peter Liepa & Klaus Quindt)[cr CUGKG].d64
+File: QUOLDER DASH 4
+Size: 121 Blocks
+
+Game don't run.
+After loading only "READY" is displayed.
+
+But the game can be found here:
+\caves\Coolshaker_Union_Gang_KG\Quolder_Dash
+
+so I do no further investigations.
+
