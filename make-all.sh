@@ -24,12 +24,6 @@ rm -v ./configure ./aclocal.m4 ./config.h.in
 find . \( -name "Makefile" -o -name "Makefile.in" \) -exec rm -v {} \;
 # NOTE: we keep po/Makefile.in.in, po/POTFILES.in
 
-echo -n creating cave list...
-cd caves
-./create_makefile.sh
-cd ..
-echo done
-
 #autoupdate # updates configure.ac
 autoreconf # one command instead of the following four commands
 #aclocal
