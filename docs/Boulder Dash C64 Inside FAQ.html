@@ -1,4 +1,4 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!doctype html>
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,7 +9,9 @@
 <body text="#000000" bgcolor="#CCCCCC" link="#3333FF" vlink="#663366" alink="#FF0000">
 
 <h3>
-<tt><font size=+2>C64 Boulder Dash Inside FAQ v3.0wip by LogicDeLuxe 14-Jul-2006</font></tt></h3>
+<tt><font size=+2>C64 Boulder Dash Inside FAQ v3.0wip by <a href="http://www.gratissaugen.de/erbsen/BD-Inside-FAQ.html">LogicDeLuxe</a> 14-Jul-2006</font></tt></h3>
+<h3>
+<tt><font size=+2 style="color: red;">Updated by revvv 2026-02-04</font></tt></h3>
 <tt><font size=+2>Content:</font></tt>
 <ul>
 <li>
@@ -1192,8 +1194,8 @@ color</tt>
 color 1</tt>
 <br><tt>01e1&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
 color 2</tt>
-<br><tt>01e3&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
-color 3</tt>
+<br><tt style="color: red;">01e3&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
+color 3 (lower 3 bits only) *</tt>
 <br><tt>In Diego effect enabled engines, there are:</tt>
 <br><tt>01e5&nbsp;&nbsp;&nbsp; 0003&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 For detection. If there are diego effects, these are $20 $90 $46</tt>
@@ -1296,8 +1298,8 @@ color</tt>
 color 1</tt>
 <br><tt>0387&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
 color 2</tt>
-<br><tt>0388&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
-color 3</tt>
+<br><tt style="color: red;">0388&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
+color 3 (lower 3 bits only) *</tt>
 <br><tt>0389&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=cave, >0=intermission</tt>
 <br><tt>038A&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-14&nbsp; Cave delay
 (00 = fast, $14 = slow)</tt>
@@ -1416,8 +1418,8 @@ color</tt>
 color 1</tt>
 <br><tt>0017&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
 color 2</tt>
-<br><tt>0018&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
-color 3</tt>
+<br><tt style="color: red;">0018&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
+color 3 (lower 3 bits only) *</tt>
 <br><tt>0019&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=cave, >0=intermission</tt>
 <br><tt>001A&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-14&nbsp; Cave delay
 (00 = fast, $14 = slow)</tt>
@@ -1710,8 +1712,8 @@ color</tt>
 color 1</tt>
 <br><tt>0387&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
 color 2</tt>
-<br><tt>0388&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
-color 3</tt>
+<br><tt style="color: red;">0388&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
+color 3 (lower 3 bits only)</tt>
 <br><tt>0389&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=cave, >0=intermission</tt>
 <br><tt>038A&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-14&nbsp; Cave delay
 (00 = fast, $14 = slow)</tt>
@@ -1920,15 +1922,15 @@ reserved</tt>
 <tr>
 <td><tt>$1a</tt></td>
 
-<td><tt>Explosion stage 1</tt></td>
+<td><tt style="color: red;"><del>Explosion stage 1</del></tt></td>
 
-<td COLSPAN="3" style="vertical-align: top;"><tt>Clock Birth stage 4</tt></td>
+<td COLSPAN="3" style="vertical-align: top;"><tt>Clock Birth stage <div style="display:inline; color: red;">3</div></tt></td>
 </tr>
 
 <tr>
 <td><tt>$1b</tt></td>
 
-<td><tt>Explosion stage 2</tt></td>
+<td><tt style="color: red;">Explosion stage 1</tt></td>
 
 <td COLSPAN="3" style="vertical-align: top;"><tt>Clock Birth stage 4</tt></td>
 </tr>
@@ -1936,7 +1938,7 @@ reserved</tt>
 <tr>
 <td><tt>$1c</tt></td>
 
-<td><tt>Explosion stage 3</tt></td>
+<td><tt style="color: red;">Explosion stage 2</tt></td>
 
 <td COLSPAN="3" style="vertical-align: top;"><tt>Biter Switch</tt></td>
 </tr>
@@ -1944,7 +1946,7 @@ reserved</tt>
 <tr>
 <td><tt>$1d</tt></td>
 
-<td><tt>Explosion stage 4</tt></td>
+<td><tt style="color: red;">Explosion stage 3</tt></td>
 
 <td COLSPAN="3" style="vertical-align: top;"><tt>Biter Switch delayed</tt></td>
 </tr>
@@ -1952,15 +1954,57 @@ reserved</tt>
 <tr>
 <td><tt>$1e</tt></td>
 
-<td><tt>Explosion stage 5</tt></td>
+<td><tt style="color: red;">Explosion stage 4</tt></td>
 
-<td COLSPAN="3" style="vertical-align: top;"><tt>T</tt></td>
+<td COLSPAN="3" style="vertical-align: top;"><tt>T  <div style="display:inline; color: red;">(Bladder Spender)</div></tt></td>
 </tr>
 
 <tr>
-<td><tt>$1f-$24</tt></td>
+<td><tt>$1f</tt></td>
 
-<td COLSPAN="4"><tt>Diamond Birth stages</tt></td>
+<td><tt style="color: red;">Explosion stage 5</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Diamond Birth stage 1</tt></td>
+</tr>
+
+<tr>
+<td><tt>$20</tt></td>
+
+<td><tt style="color: red;">Diamond Birth stage 1</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Diamond Birth stage 2</tt></td>
+</tr>
+
+<tr>
+<td><tt>$21</tt></td>
+
+<td><tt style="color: red;">Diamond Birth stage 2</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Diamond Birth stage 3</tt></td>
+</tr>
+
+<tr>
+<td><tt>$22</tt></td>
+
+<td><tt style="color: red;">Diamond Birth stage 3</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Diamond Birth stage 4</tt></td>
+</tr>
+
+<tr>
+<td><tt>$23</tt></td>
+
+<td><tt style="color: red;">Diamond Birth stage 4</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Diamond Birth stage 5</tt></td>
+</tr>
+
+<tr>
+<td><tt>$24</tt></td>
+
+<td><tt style="color: red;">Diamond Birth stage 5</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Diamond Birth stage 6</tt></td>
 </tr>
 
 <tr>
@@ -1970,9 +2014,17 @@ reserved</tt>
 </tr>
 
 <tr>
-<td><tt>$26-$29</tt></td>
+<td><tt>$26-$28</tt></td>
 
-<td COLSPAN="4"><tt>Rockford Birth stages</tt></td>
+<td COLSPAN="4"><tt>Rockford Birth stages <div style="display:inline; color: red;">1-3</div></tt></td>
+</tr>
+
+<tr>
+<td><tt>$29</tt></td>
+
+<td><tt style="display:inline; color: red;"><del>Rockford Birth stage 4</del></tt></td>
+
+<td COLSPAN="3"><tt style="color: red;">Clock</tt></td>
 </tr>
 
 <tr>
@@ -2020,9 +2072,35 @@ reserved</tt>
 </tr>
 
 <tr>
-<td><tt>$30-$33</tt></td>
+<td><tt>$30</tt></td>
 
-<td COLSPAN="4"><tt>Butterfly (down, left, up and right)</tt></td>
+<td><tt>Butterfly down</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt style="color: red;">Butterfly right</tt></td>
+</tr>
+
+<tr>
+<td><tt>$31</tt></td>
+
+<td><tt>Butterfly left</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt style="color: red;">Butterfly up</tt></td>
+</tr>
+
+<tr>
+<td><tt>$32</tt></td>
+
+<td><tt>Butterfly up</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt style="color: red;">Butterfly left</tt></td>
+</tr>
+
+<tr>
+<td><tt>$33</tt></td>
+
+<td><tt>Butterfly right</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt style="color: red;">Butterfly down</tt></td>
 </tr>
 
 <tr>
@@ -2116,7 +2194,7 @@ reserved</tt>
 
 <td></td>
 
-<td COLSPAN="3"><tt>Explosion stages</tt></td>
+<td COLSPAN="3"><tt>Explosion stages <div style="display:inline; color: red;">1-6</div></tt></td>
 </tr>
 
 <tr>
@@ -2811,8 +2889,8 @@ and down)</tt></td>
 
 <td style="vertical-align: top;"></td>
 
-<td style="vertical-align: top;"><tt>Alternative Butterfly (down, left,
-up and right)</tt></td>
+<td style="vertical-align: top;"><tt>Alternative Butterfly <div style="display:inline; color: red;">(right, up,
+left and down)</div></tt></td>
 
 <td style="vertical-align: top;"></td>
 </tr>
