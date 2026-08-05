@@ -1,1 +1,1 @@
-EXTRA_DIST = $(pkgdatadir)/caves
+EXTRA_DIST = .
