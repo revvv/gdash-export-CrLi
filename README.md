@@ -40,6 +40,9 @@ This fork adds some new features:
 ### [Download](https://github.com/revvv/gdash-export-CrLi/releases)
 
 ### FAQ
+- Q: I'm a Boulder Dash junkie and I want to know more about its internals?<br>
+  A: Here is the [Boulder Dash C64 Inside FAQ](https://htmlpreview.github.io/?https://github.com/revvv/gdash-export-CrLi/blob/master/docs/Boulder%20Dash%20C64%20Inside%20FAQ.html) which helped me a lot.
+
 - Q: Why is there no console output for `gdash --help` on Windows?<br>
   A: You can redirect the output to a file:<br>
     `$ gdash --help > gdash.log 2>&1`
