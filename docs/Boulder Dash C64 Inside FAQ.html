@@ -1,0 +1,3354 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <meta name="GENERATOR" content="Mozilla/4.7 [de] (WinNT; I) [Netscape]">
+   <meta name="Author" content="LogicDeLuxe">
+   <title>Boulder Dash C64 Inside FAQ v1.2</title>
+</head>
+<body text="#000000" bgcolor="#CCCCCC" link="#3333FF" vlink="#663366" alink="#FF0000">
+
+<h3>
+<tt><font size=+2>C64 Boulder Dash Inside FAQ v3.0wip by LogicDeLuxe 14-Jul-2006</font></tt></h3>
+<tt><font size=+2>Content:</font></tt>
+<ul>
+<li>
+<tt><a href="#Introduction">Introduction</a></tt></li>
+
+<li>
+<tt><a href="#The differences between BD1, BD2, PLCK, 1stB, CrDr">The differences
+between BD1, BD2, PLCK, 1stB, CrDr and the CrLi Engine</a></tt></li>
+
+<li>
+<tt><a href="#Known bugs and">Known bugs and fixes</a></tt></li>
+
+<li>
+<tt><a href="#BD1">BD1 Engine</a></tt></li>
+
+<li>
+<tt><a href="#BD2">BD2 Engine</a></tt></li>
+
+<li>
+<tt><a href="#PLCK-Engine">PLCK Engine</a></tt></li>
+
+<li>
+<tt><a href="#1stB-Engine">1stB Engine</a></tt></li>
+
+<li>
+<tt><a href="#CrDr-Engine">CrDr Engine</a></tt></li>
+
+<li>
+<tt><a href="#CrLi-Engine">CrLi Engine</a></tt></li>
+
+<li>
+<tt><a href="#Objects">Boulder Dash Elements</a></tt></li>
+
+<li>
+<tt>Predictable random numbers (v1.02) *</tt></li>
+
+<li>
+<tt><a href="#Character sets">Character sets</a></tt></li>
+
+<ul>
+<li>
+<tt><a href="#The big letters logo is built of the chars">The big letters
+logo</a></tt></li>
+
+<li>
+<tt><a href="#Two char wide">Two char wide letters</a></tt></li>
+
+<li>
+<tt><a href="#Graphic character">Graphic character set</a></tt></li>
+</ul>
+</ul>
+<tt>* included in a separate file</tt>
+<h3>
+<a NAME="Introduction"></a><tt><font size=+2>Introduction</font></tt></h3>
+<tt>Rockford is a registered Trademark by First Star Software.</tt>
+<br><tt>Boulder Dash is copyright by First Star Software.</tt>
+<br><tt>You should visit the official homepage, especially, if you are
+looking for the original Boulder Dash games: <a href="http://www.boulder-dash.com" target="_blank">www.boulder-dash.com</a></tt>
+<br><tt>Some tables are taken from Peter Broadribb's Site and were corrected.</tt>
+<br><tt>This document is for information purpose only and not meant for
+making profit out of it.</tt>
+<br><tt>As a consequence, you should avoid using those names in your software.
+Several Boulder Dash clones were banned in the past because of inflicting
+copyrights.</tt>
+<p><tt>There is no waranty for the information in this document, though
+it should be fairly accurate. It mainly covers the C64 internals of Boulder
+Dash. The Atari 400 and Plus/4 versions are almost identical. Other systems
+usually feature a completely different engine.</tt>
+<p><tt>The latest version of this document can be found at <a href="http://www.gratissaugen.de/erbsen">www.gratissaugen.de/erbsen</a></tt>
+<p><tt>All numbers marked with $ as well as memory adresses are given in
+hexadecimal.</tt>
+<p><tt>Engine abbreviation:</tt>
+<br><tt><b>BD1</b>: Boulder Dash 1</tt>
+<br><tt><b>BD2</b>: Boulder Dash 2</tt>
+<br><tt><b>PLCK</b>: Peter Liepa Construction Kit</tt>
+<br><tt><b>1stB</b>: First Boulder Dash (aka. New Boulder Dash)</tt>
+<br><tt><b>CrDr</b>: Crazy Dream</tt>
+<br><tt><b>CrLi</b>: Crazy Light</tt>
+<p><tt>The <b>start signal</b> is another frequently used term in this
+document. It describes the point in time the cave timer starts. It is accompanied
+with a crack sound and the status bar changes.</tt>
+<br>&nbsp;
+<h3>
+<a NAME="The differences between BD1, BD2, PLCK, 1stB, CrDr"></a><tt><font size=+2>The
+differences between BD1, BD2, PLCK, 1stB, CrDr and the CrLi Engine</font></tt></h3>
+
+<ul>
+<li>
+<tt>Amoeba:</tt></li>
+
+<ul>
+<li>
+<tt><b>BD1</b>:</tt></li>
+</ul>
+
+<ul>
+<ul>
+<li>
+<tt>The slow growing timer is start immediately (even before the <b>start
+signal</b>).</tt></li>
+</ul>
+
+<li>
+<b><tt>BD2</tt></b></li>
+
+<ul>
+<li>
+<tt>The timer starts with the first possibility of growing.</tt></li>
+</ul>
+
+<li style="font-weight: bold;">
+<b><tt>PLCK</tt></b></li>
+
+<ul>
+<li>
+<tt>Introduces separat time setups for Amoeba and Magicwall.</tt></li>
+</ul>
+
+<li>
+<tt><b>1stB</b>, <b>CrDr</b>, <b>CrLi</b>:</tt></li>
+
+<ul>
+<li>
+<tt>The timer does not start befor the <b>start signal</b>.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Destructable titanium wall:</tt></li>
+
+<ul>
+<li>
+<tt><b>BD1</b>, <b>BD2</b>, <b>CrDr</b></tt></li>
+</ul>
+
+<ul>
+<ul>
+<li>
+<tt>Introduced in <b>BD1</b></tt></li>
+
+<li>
+<tt>Was replaced with the hidden exit in <b>PLCK</b>. Has its own element
+in <b>CrDr</b>, though.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Magic wall:</tt></li>
+
+<ul>
+<li>
+<tt><b>BD1</b>:</tt></li>
+
+<ul>
+<li>
+<tt>When a Boulder drops into it, the cavescan restarts skipping all the
+rest of the cave. As a side effect (which was first deployed in BD3) Amoebas
+beyond that point aren't count, neither is the possibility of growing checked
+for. Hence, if there is no Amoeba with the ability of growing up to the
+used Magic Wall, the Amoeba will convert to Diamonds.</tt></li>
+
+<li>
+<tt>The timer starts with the first usage (even before the <b>start signal</b>).</tt></li>
+</ul>
+
+<li>
+<tt><b>BD2</b>:</tt></li>
+
+<ul>
+<li>
+<tt>The strange timing was removed. As a consequence, it is not possible
+to convert the amoeba by using a Magic Wall anymore.</tt></li>
+</ul>
+
+<li>
+<tt><b>PLCK</b>:</tt></li>
+
+<ul>
+<li>
+<tt>Introduces separat time setups for Amoeba and Magic Wall.</tt></li>
+</ul>
+
+<li>
+<tt><b>1stB</b>, <b>CrDr</b>, <b>CrLi</b>:</tt></li>
+
+<ul>
+<li>
+<tt>The timer does not start before the <b>start signal</b>. It can be
+still activated before that point, though.</tt></li>
+
+<li>
+<tt>There is a new option to convert the Amoeba, no matter where is it.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Border behavior:</tt></li>
+
+<ul>
+<li>
+<tt><b>BD1</b>, <b>BD2</b>:</tt></li>
+</ul>
+
+<ul>
+<ul>
+<li>
+<tt>The first and last line is included in the code pointer scan, but it
+is not scanned for the effect table. That means, whenever an element moves
+to the border, its delay state becomes permanent. In/Out Boxes work correctly
+on the border.</tt></li>
+</ul>
+
+<li style="font-weight: bold;">
+<tt><b>PLCK</b>:</tt></li>
+
+<ul>
+<li>
+<tt>The upper and lower border is not scanned at all. Elements can react
+with items on the border, though. In/Out Boxes don't work on the border.
+Amoebas are not count there.</tt></li>
+</ul>
+
+<li>
+<tt><b>1stB</b>, <b>CrDr</b>, <b>CrLi</b>:</tt></li>
+
+<ul>
+<li>
+<tt>The border is fully integrated. Items moving out of it are redirected
+to the opposide border. The interaction is implemented by copying the borders
+on top/under the opposide border between each scan. This method has side
+effects, but was choosen due to its fast nature, and in the avarage cave,
+it is accurate enough.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Scrolling:</tt></li>
+
+<ul>
+<li>
+<tt><b>BD1</b>, <b>BD2</b>, <b>PLCK</b>:</tt></li>
+
+<ul>
+<li>
+<tt>It starts at the latest Inbox found during setting up the cave.</tt></li>
+
+<li>
+<tt>If the cave has more than one Inbox, it scrolls one step for each Rockford
+making a step. If there are really a lot of Rockfords, this can cause overflows
+and the game is scrolling back and forth.</tt></li>
+</ul>
+
+<li>
+<tt><b>1stB</b>, <b>CrDr</b>, <b>CrLi</b>:</tt></li>
+
+<ul>
+<li>
+<tt>The game initially scrolls to the first line featuring an Inbox and
+there to the right most one.</tt></li>
+
+<li>
+<tt>As soon as Rockford(s) appear, the game always scrolls to the first
+found one in each scan.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Flashing In/Out boxes:</tt></li>
+
+<ul>
+<li>
+<tt><b>BD1</b>, <b>BD2</b>, <b>PLCK</b>:</tt></li>
+
+<ul>
+<li>
+<tt>The state is alternatig on each found activ Box in order. If there
+is an even number of activ Boxes, they will not flash, but display a pattern
+of empty and full boxes.</tt></li>
+
+<li>
+<tt>Rockford can only appear from its Inbox from its empty state. If there
+are many Inboxes, this results in a pattern of appearance rather than all
+Rockfords appearing at once.</tt></li>
+</ul>
+
+<li>
+<tt><b>1stB</b>, <b>CrDr</b>, <b>CrLi</b>:</tt></li>
+
+<ul>
+<li>
+<tt>Flashing is enforced by ensuring the state of the first Box found is
+alternating between each scan.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Growing Wall:</tt></li>
+
+<ul>
+<li>
+<tt><b>BD2</b>, <b>PLCK</b>:</tt></li>
+
+<ul>
+<li>
+<tt>It was introduced with <b>BD2</b>, though it was later added to <b>BD1</b>
+in some fanmade games. No parameters available. Can only grow horizontal.</tt></li>
+</ul>
+
+<ul>
+<li>
+<tt>Except later, the Diego Effects made it possible to let the Growing
+Wall look like another element, typically a Titanium Wall.</tt></li>
+</ul>
+
+<li>
+<tt><b>1stB</b>, <b>CrDr</b>, <b>CrLi</b>:</tt></li>
+
+<ul>
+<li>
+<tt>The growing direction can be preset and/or switched in game.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Slime:</tt></li>
+
+<ul>
+<li>
+<tt><b>BD2</b>, <b>PLCK</b>:</tt></li>
+
+<ul>
+<li>
+<tt>It was introduced with <b>BD2</b>, though it was later added to <b>BD1</b>
+in some fanmade games. No parameters available except the permeability.
+It uses the same graphic as the Amoeba.</tt></li>
+</ul>
+
+<li>
+<tt><b>1stB</b>, <b>CrDr</b>, <b>CrLi</b>:</tt></li>
+
+<ul>
+<li>
+<tt>Has its own, independed graphic now. The two elements going through
+it, can be freely selected.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Voodoo Rockfords</tt></li>
+
+<ul>
+<li>
+<tt><b>PLCK</b>:</tt></li>
+
+<ul>
+<li>
+<tt>Introduced with <b>PLCK</b>.</tt></li>
+
+<li>
+<tt>Later changed to the Mrs. Rockford graphic in many games.</tt></li>
+</ul>
+
+<li>
+<tt><b>1stB</b>, <b>CrDr</b>, <b>CrLi</b>:</tt></li>
+
+<ul>
+<li>
+<tt>Can catch and collect Diamonds now. When destroyed, it converts to
+a Gravestone surrounded by Titanium Walls and causes a time penalty.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Hidden Exit:</tt></li>
+
+<ul>
+<li>
+<tt><b>PLCK</b>, <b>CrDr</b>, <b>CrLi</b>:</tt></li>
+</ul>
+
+<ul>
+<ul>
+<li>
+<tt>Introduced in <b>PLCK</b>.</tt></li>
+</ul>
+</ul>
+
+<ul>
+<ul>
+<li>
+<tt>Replaces the Destructable Titanium Wall (which has a separate element
+in <b>CrDr</b>, though)</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>Enemy direction change</tt></li>
+
+<ul>
+<li>
+<tt><b>1stB</b>, <b>CrDr</b>:</tt></li>
+</ul>
+
+<ul>
+<ul>
+<li>
+<tt>If automatic enemy direction change is enabled, the enemy will change
+direction the first time at the <b>start signal</b>.</tt></li>
+</ul>
+</ul>
+
+<ul>
+<li>
+<tt><b>CrLi</b>:</tt></li>
+</ul>
+
+<ul>
+<ul>
+<li>
+<tt>no direction change will occour at the <b>start signal</b>.</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt>There are several other elements introduced in <b>1stB</b>, <b>CrDr</b>
+or <b>CrLi</b>.</tt></li>
+</ul>
+
+<h3 style="font-family: courier new,monospace;">
+<a NAME="Known bugs and"></a><tt><font size=+2>Known bugs and fixes</font></tt></h3>
+
+<ul style="font-family: courier new,monospace;">
+<li>
+<tt>General bugs found in several engine</tt></li>
+
+<ul>
+<li>
+<tt>In two player games, the scores display is not updated until the player
+earns some points.</tt></li>
+
+<li>
+<tt>Also in two player games, the Inbox is flashing slightly longer, rendering
+some caves unplayable.</tt></li>
+
+<ul>
+<li>
+<tt>Todo: Bugfix</tt></li>
+</ul>
+
+<li>
+<tt>When the game is paused, the timers for Amoeba and the Magic Wall are
+still running. The Magic Wall even stops milling during a paused game when
+the milling time runs out.</tt></li>
+
+<li>
+<tt>When a game is paused and unpaused, the Amoeba can be heared before
+the <b>start signal</b>.</tt></li>
+
+<li>
+<tt>The game time is counted in a raster line interrupt, which causes a
+PAL machine to have only 50 Boulder Dash seconds in a real minute. In case,
+you can't play a NTSC game on your PAL machine, you can try to patch it.
+Though virtually all fanmade Boulder Dash caves are designed for PAL machines
+for some reason:</tt></li>
+
+<ul>
+<li>
+<tt><b>BD1</b> (Mirco Fun) $7116=$32; Poke 28950,50</tt></li>
+
+<li>
+<tt><b>BD1</b> (rerelease) $74ae=$32; Poke 29870,50</tt></li>
+
+<li>
+<tt><b>BD1</b> (Super Boulderdash) $749e=$32; Poke 29854,50</tt></li>
+
+<li>
+<tt><b>BD2</b> $a2f9=$32; Poke 41721,50</tt></li>
+
+<li>
+<tt><b>PLCK</b> (disk and tape); $468c=$32; Poke 18060,50</tt></li>
+
+<li>
+<tt><b>1stB</b> $3f4c=$32; Poke 16204,50</tt></li>
+
+<li>
+<tt><b>CrLi</b> has autodetection, so you don't need to patch it.</tt></li>
+</ul>
+
+<ul>
+<li>
+<tt>If you need to play a PAL game (which virtually all fanmade games are)
+on an NTSC machine, you just have to Poke 72 ($48) instead of 50 ($32).</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt><b>BD1</b>:</tt></li>
+
+<ul>
+<li>
+<tt>When the screen scrolls left and you're running towards the right,
+Rockford pauses for one frame when the scroll direction changes.</tt></li>
+
+<li>
+<tt>When dropping a Diamond into the Magic Wall without converting it to
+a Boulder (which happens if either there is no Space under it or if the
+milling time is up), the Diamond appears to be lying on the Magic Wall
+when there really is just Space left. The Space is drawn at the wrong place,
+hence some other elements become invisible. Bugfix:</tt></li>
+
+<ul>
+<li>
+<tt>Micro Fun release: $6f22=$08, $6f28=$02; Poke 28450,8:Poke 28456,2</tt></li>
+
+<li>
+<tt>First Star Software Rerelease: $72ba=$08, $72c0=$02; Poke 29370,8:Poke29376,2</tt></li>
+
+<li>
+<tt>EA Release: $72aa=$08, $72b0,$02; Poke 29354,8:Poke29360,2</tt></li>
+</ul>
+
+<li>
+<tt>A not activated Amoeba sometimes converts to Diamonds.</tt></li>
+</ul>
+
+<li>
+<tt><b>PLCK</b> Construction Kit:</tt></li>
+
+<ul>
+<li>
+<tt>Can crash during saving. When this happens, just save the RAM at $be00-$bff0
+manually. Alternatively, you can use a cave rescue tool.</tt></li>
+
+<li>
+<tt>There are many strange behaviors in the editor.</tt></li>
+</ul>
+
+<li>
+<tt><b>PLCK</b> game modul:</tt></li>
+
+<ul>
+<li>
+<tt>Magic Wall has no sound. Bugfix (disk and tape): $401d=$e5; Poke 16413,229</tt></li>
+
+<li>
+<tt>The dissolve effect has a really bad bug which causes random adresses
+overwritten with $7c bytes. Sometimes caves are destroyed that way, somtimes
+the code is destroyed and the game crashes immediately. Bugfix:</tt></li>
+
+<ul>
+<li>
+<tt>disk version: $5663=$ea, $5664=$ea; Poke 22115,234:Poke22116,234</tt></li>
+
+<li>
+<tt>tape version: $565d=$ea, $565e=$ea; Poke 22109,234:Poke22110,234</tt></li>
+</ul>
+</ul>
+
+<li>
+<tt><b>1stB</b>:</tt></li>
+
+<ul>
+<li>
+<tt>When the Commodore key is pressed before the <b>start signal</b>, the
+game does not end as it is supposed to and every diamond counts 500 points.</tt></li>
+</ul>
+</ul>
+
+<h3>
+<a NAME="BD1"></a><tt><font size=+2>BD1 Engine</font></tt></h3>
+<tt>There are three releases of Boulder Dash 1 on the C64:</tt>
+<table BORDER >
+<tr>
+<td></td>
+
+<td style="font-family: courier new,monospace;"><b><tt>Micro Fun release</tt></b></td>
+
+<td style="font-family: courier new,monospace;"><b><tt>First Star Software
+rerelease</tt></b></td>
+
+<td style="font-family: courier new,monospace;"><b><tt>Electronic Arts
+release (Super Boulderdash)</tt></b></td>
+</tr>
+
+<tr>
+<td style="font-family: courier new,monospace;"><tt>Comment:</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>This release has no
+logo under the title screen.&nbsp;</tt>
+<br><tt>Boulder Dash 3 is based on this version.</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>This release features
+the First Star Software logo under the title screen.</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>This release has an
+additional EA logo on the left of the First Star Software logo.</tt></td>
+</tr>
+
+<tr>
+<td style="font-family: courier new,monospace;"><tt>Program:</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>copy protection: $8cf2-$8d8f&nbsp;</tt>
+<br><tt>game $5000-$8b86 (caves can be stored beyond that point)</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>$5000-$9001</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>$5000-$8fc0 (without
+intro)</tt></td>
+</tr>
+
+<tr>
+<td style="font-family: courier new,monospace;"><tt>Start:</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>copy protection: $8cf2;
+sys36082&nbsp;</tt>
+<br><tt>game: $8ab3; sys35507</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>$8e69; sys36457</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>intro: $438a; sys17290&nbsp;</tt>
+<br><tt>game: $8e50; sys36432</tt></td>
+</tr>
+
+<tr>
+<td style="font-family: courier new,monospace;"><tt>Title screen:</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>$66e8-$6acf</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>&nbsp;</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>&nbsp;</tt></td>
+</tr>
+
+<tr>
+<td style="font-family: courier new,monospace;"><tt>Bottom lines after
+F1 hit:</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>$6b7c-$6b8f, $6b90-$6ba3,
+$6c68-$6c9b</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>&nbsp;</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>&nbsp;</tt></td>
+</tr>
+
+<tr>
+<td style="font-family: courier new,monospace;"><tt>Cavepointers</tt></td>
+
+<td COLSPAN="2" style="font-family: courier new,monospace;"><tt>specified
+relative to $582e, Lo/Hi-Byte: $5806-$582d, intermission at the end.</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>specified relative
+to $581e, Lo/Hi-Byte: $57f6-$581d, intermission at the end.</tt></td>
+</tr>
+
+<tr>
+<td style="font-family: courier new,monospace;"><tt>Animation switch table:</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>$8379-$838c</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>$8740-$8753</tt></td>
+
+<td style="font-family: courier new,monospace;"><tt>$8744-$8757</tt></td>
+</tr>
+</table>
+<tt>The physics engine and the caves are completely identical in all three
+versions.</tt>
+
+<p style="font-family: courier new,monospace;"><tt>The animation switch
+table has one byte per entry with the following meanings:</tt>
+<br><tt>bit0 = animate Fireflies</tt>
+<br><tt>bit1 = animate Butterflies</tt>
+<br><tt>bit2 = animate Amoebas</tt>
+
+<p style="font-family: courier new,monospace;"><tt>Offset&nbsp; Description</tt>
+<br><tt>------&nbsp; -----------</tt>
+<br><tt>$00&nbsp;&nbsp;&nbsp;&nbsp; unused. Though it usually reads the
+cave number</tt>
+<br><tt>$01&nbsp;&nbsp;&nbsp;&nbsp; Magic Wall milling time, also max.
+Amoeba time at slow growth</tt>
+<br><tt>$02&nbsp;&nbsp;&nbsp;&nbsp; Initial Diamond value</tt>
+<br><tt>$03&nbsp;&nbsp;&nbsp;&nbsp; Extra Diamond value</tt>
+<br><tt>$04&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 1</tt>
+<br><tt>$05&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 2</tt>
+<br><tt>$06&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 3</tt>
+<br><tt>$07&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 4</tt>
+<br><tt>$08&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 5</tt>
+<br><tt>$09&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+1</tt>
+<br><tt>$0A&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+2</tt>
+<br><tt>$0B&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+3</tt>
+<br><tt>$0C&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+4</tt>
+<br><tt>$0D&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+5</tt>
+<br><tt>$0E&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 1</tt>
+<br><tt>$0F&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 2</tt>
+<br><tt>$10&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 3</tt>
+<br><tt>$11&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 4</tt>
+<br><tt>$12&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 5</tt>
+<br><tt>$13&nbsp;&nbsp;&nbsp;&nbsp; Colour 1</tt>
+<br><tt>$14&nbsp;&nbsp;&nbsp;&nbsp; Colour 2</tt>
+<br><tt>$15&nbsp;&nbsp;&nbsp;&nbsp; Colour 3</tt>
+<br><tt>$16&nbsp;&nbsp;&nbsp;&nbsp; unused, general purpose in some fangames</tt>
+<br><tt>$17&nbsp;&nbsp;&nbsp;&nbsp; unused, general purpose in some fangames</tt>
+<br><tt>$18&nbsp;&nbsp;&nbsp;&nbsp; Random element number 1</tt>
+<br><tt>$19&nbsp;&nbsp;&nbsp;&nbsp; Random element number 2</tt>
+<br><tt>$1A&nbsp;&nbsp;&nbsp;&nbsp; Random element number 3</tt>
+<br><tt>$1B&nbsp;&nbsp;&nbsp;&nbsp; Random element number 4</tt>
+<br><tt>$1C&nbsp;&nbsp;&nbsp;&nbsp; Probability of element 1</tt>
+<br><tt>$1D&nbsp;&nbsp;&nbsp;&nbsp; Probability of element 2</tt>
+<br><tt>$1E&nbsp;&nbsp;&nbsp;&nbsp; Probability of element 3</tt>
+<br><tt>$1F&nbsp;&nbsp;&nbsp;&nbsp; Probability of element 4</tt>
+<br><tt>$20 onwards: cave data, deliminated with $FF.</tt>
+
+<p style="font-family: courier new,monospace;"><tt>The cave data (beginning
+at offset $20) is broken into variable sized records where the first byte
+contains the object to store (low 6 bits only) and the kind of structure
+to create (upper 2 bits). Depending on the structure to create, there are
+2, 4 or 5 bytes of parameters that follow.</tt>
+<br><tt>A cave can have up to 255 byte. Valid positions are column=0..39
+and row=2..23 whereas 0;2 is the top left corner on the border.</tt>
+
+<p style="font-family: courier new,monospace;"><tt>The four structure codes
+are:</tt>
+<ul style="font-family: courier new,monospace;">
+<li>
+<tt>00 = draw a single object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: column</tt></li>
+
+<li>
+<tt>param byte 2: row</tt></li>
+</ul>
+
+<li>
+<tt>01 = draw a line of that object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: begin column</tt></li>
+
+<li>
+<tt>param byte 2: begin row</tt></li>
+
+<li>
+<tt>param byte 3: length</tt></li>
+
+<li>
+<tt>param byte 4: direction code (0=up, 1=up/right, 2=right, 3=down/right,
+4=down, 5=down/left, 6=left, 7=up/left)</tt></li>
+</ul>
+
+<li>
+<tt>10 = draw a rectangle of that object, filled with a second object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: top left column</tt></li>
+
+<li>
+<tt>param byte 2: top left row</tt></li>
+
+<li>
+<tt>param byte 3: length</tt></li>
+
+<li>
+<tt>param byte 4: height</tt></li>
+
+<li>
+<tt>param byte 5: object to fill with</tt></li>
+</ul>
+
+<li>
+<tt>11 = draw a rectangle of that object, don't modify the insides.</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: top left column</tt></li>
+
+<li>
+<tt>param byte 2: top left row</tt></li>
+
+<li>
+<tt>param byte 3: length</tt></li>
+
+<li>
+<tt>param byte 4: height</tt></li>
+</ul>
+</ul>
+<tt>Decoding "randomly placed" objects</tt>
+<br><tt>All caves have the opportunity to place up to four objects in "random"
+positions. They aren't really random, in the sense that the randomiser
+is set to a given seed value, and probabilities are checked against a given
+probability code; this way, objects will be "randomly" placed in the same
+positions each time you try the cave. Method: For each cave position (20
+lines x 40 columns), pick a "random" number (0-255). If the random number
+is less than any of the four probability codes given at offsets $1C to
+$1F in the cave data, then put the object code given at the corresponding
+offset from $18 to $1B at the current position. (If the random number is
+less than more than one of the given probabilities, preference is given
+to the later object codes - in order of offsets $1B, $1A, $19, $18). Note
+that after this routine has finished, the bounding steel wall is placed
+over the extremeties of the cave (effectively DrawRect(0,2,40,22)).</tt>
+<h3>
+<a NAME="BD2"></a><tt><font size=+2><b>BD2</b> Engine</font></tt></h3>
+<tt>Start: $c000; sys49152</tt>
+<br><tt>Cavepointers: $89b0-$89d7 LSB first</tt>
+<br><tt>Cave color table $89d8-$89ff; 3 byte per cave</tt>
+
+<p style="font-family: courier new,monospace;"><tt>Offset&nbsp; Description</tt>
+<br><tt>------&nbsp; -----------</tt>
+<br><tt>$00&nbsp;&nbsp;&nbsp;&nbsp; Magic Wall milling time, also max.
+Amoeba time at slow growth</tt>
+<br><tt>$01&nbsp;&nbsp;&nbsp;&nbsp; Initial Diamond value</tt>
+<br><tt>$02&nbsp;&nbsp;&nbsp;&nbsp; Extra Diamond value</tt>
+<br><tt>$03&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 1</tt>
+<br><tt>$04&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 2</tt>
+<br><tt>$05&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 3</tt>
+<br><tt>$06&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 4</tt>
+<br><tt>$07&nbsp;&nbsp;&nbsp;&nbsp; Cave time for difficulty level 5</tt>
+<br><tt>$08&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+1</tt>
+<br><tt>$09&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+2</tt>
+<br><tt>$0A&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+3</tt>
+<br><tt>$0B&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+4</tt>
+<br><tt>$0C&nbsp;&nbsp;&nbsp;&nbsp; Diamonds needed on difficulty level
+5</tt>
+<br><tt>$0D&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 1</tt>
+<br><tt>$0E&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 2</tt>
+<br><tt>$0F&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 3</tt>
+<br><tt>$10&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 4</tt>
+<br><tt>$11&nbsp;&nbsp;&nbsp;&nbsp; Initial randomiser seed value for difficulty
+level 5</tt>
+<br><tt>$12&nbsp;&nbsp;&nbsp;&nbsp; Probability of element 1</tt>
+<br><tt>$13&nbsp;&nbsp;&nbsp;&nbsp; Probability of element 2</tt>
+<br><tt>$14&nbsp;&nbsp;&nbsp;&nbsp; Probability of element 3</tt>
+<br><tt>$15&nbsp;&nbsp;&nbsp;&nbsp; Probability of element 4</tt>
+<br><tt>$16&nbsp;&nbsp;&nbsp;&nbsp; Random element number 1</tt>
+<br><tt>$17&nbsp;&nbsp;&nbsp;&nbsp; Random element number 2</tt>
+<br><tt>$18&nbsp;&nbsp;&nbsp;&nbsp; Random element number 3</tt>
+<br><tt>$19&nbsp;&nbsp;&nbsp;&nbsp; Random element number 4</tt>
+<br><tt>$1A onwards: cave data, deliminated with $FF followed by the animation
+switch:</tt>
+<br><tt>bit0 = animate Fireflies</tt>
+<br><tt>bit1 = animate Butterflies</tt>
+<br><tt>bit2 = animate Amoebas</tt>
+<p><tt>The cave data (beginning at offset $1A) is broken into variable
+sized records where the first byte is the structure code. Depending on
+the structure to create, there are 3, 5, 6 or 8 bytes of parameters that
+follow.</tt>
+<br><tt>A cave can have up to 250 byte. Valid positions are column=0..39
+and row=0..21 whereas 0;0 is the top left corner on the border.</tt>
+<br><tt>Rockford extended the engine in order to use maps of an object
+and Construction Kit Caves in the Profiboulder series.</tt>
+<br><tt>The random number generator works exactly like in <b>BD2</b> and
+is also used for the Slime permeability.</tt>
+
+<p style="font-family: courier new,monospace;"><tt>The structure codes
+are:</tt>
+<ul style="font-family: courier new,monospace;">
+<li>
+<tt>$00 = draw a line of an object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: begin row</tt></li>
+
+<li>
+<tt>param byte 3: begin column</tt></li>
+
+<li>
+<tt>param byte 4: direction code ($00=up, $02=up/right, $04=right, $06=down/right,
+$08=down, $0a=down/left, $0c=left, $0e=up/left)</tt></li>
+
+<li>
+<tt>param byte 5: length</tt></li>
+</ul>
+
+<li>
+<tt>$01 = draw a rectangle of an object, don't modify the insides</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: top left row</tt></li>
+
+<li>
+<tt>param byte 3: top left column</tt></li>
+
+<li>
+<tt>param byte 4: height</tt></li>
+
+<li>
+<tt>param byte 5: length</tt></li>
+</ul>
+
+<li>
+<tt>$02 = draw a rectangle of an object, filled with a second object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: top left row</tt></li>
+
+<li>
+<tt>param byte 3: top left column</tt></li>
+
+<li>
+<tt>param byte 4: height</tt></li>
+
+<li>
+<tt>param byte 5: length</tt></li>
+
+<li>
+<tt>param byte 6: object to fill with</tt></li>
+</ul>
+
+<li>
+<tt>$03 = draw a single object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: row</tt></li>
+
+<li>
+<tt>param byte 3: column</tt></li>
+</ul>
+
+<li>
+<tt>$04 = draw a raster pattern of an object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: top left row</tt></li>
+
+<li>
+<tt>param byte 3: top left column</tt></li>
+
+<li>
+<tt>param byte 4: amount of rows</tt></li>
+
+<li>
+<tt>param byte 5: amount of columns</tt></li>
+
+<li>
+<tt>param byte 6: distance between rows</tt></li>
+
+<li>
+<tt>param byte 7: distance between columns</tt></li>
+</ul>
+
+<li>
+<tt>$05 = draw a map of an object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: amount of values</tt></li>
+
+<li>
+<tt>param byte 3: MSB of the target adress ($0850..$0bc0)</tt></li>
+
+<li>
+<tt>param byte 4: LSB of the target adress</tt></li>
+
+<li>
+<tt>param byte 5 onwards: the map description with LSBs drawn first</tt></li>
+</ul>
+
+<li>
+<tt>$06 = add an object relative to another</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: existing object</tt></li>
+
+<li>
+<tt>param byte 2: object to draw</tt></li>
+
+<li>
+<tt>param byte 3: distance to the right; if the end of the row is reached,
+the next row is used.</tt></li>
+</ul>
+
+<li>
+<tt>$07 = set Slime permeability</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: every bit has an equal value, more bits set to 1 means
+more delay.</tt></li>
+
+<br><tt>The pattern is related to the random number generator and to the
+seed used for this cave and level.</tt></ul>
+
+<li>
+<tt>$09 = use a Construction Kit cave</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: LSB of the cave data</tt></li>
+
+<li>
+<tt>param byte 2: MSB of the cave data</tt></li>
+
+<li>
+<tt>param byte 3: row of the inbox</tt></li>
+
+<li>
+<tt>param byte 4: column of the inbox</tt></li>
+
+<br><tt>The cave data does not contain the upper and lower borders. The
+cave description uses the nybble codes defined for the <b>PLCK</b> engine.</tt></ul>
+</ul>
+
+<h3>
+<a NAME="PLCK-Engine"></a><tt><font size=+2>PLCK-Engine: Construction Kit</font></tt></h3>
+<tt>This engine comes with the Boulder Dash Construction Kit (aka. Boulder
+Dash IV)</tt>
+<table BORDER >
+<tr>
+<td></td>
+
+<td><tt>Construction Kit</tt></td>
+
+<td><tt>Gamemodul disk version</tt></td>
+
+<td><tt>Gamemodul tape version</tt></td>
+</tr>
+
+<tr>
+<td><tt>Comments:</tt></td>
+
+<td><tt>The editor can handle both, disks and tapes.</tt></td>
+
+<td><tt>Reads a game-file and then all the caves in it.&nbsp;</tt>
+<br><tt>After game over, you can press enter to play again or load a different
+game. The name of the currently loaded game is displayed under the Boulder
+Dash logo.</tt></td>
+
+<td><tt>Just reads the caves like they are stored on tape.&nbsp;</tt>
+<br><tt>After game over, you may choose to play again or load a different
+caveset. Since no gamefile is used, there is no game name display.</tt></td>
+</tr>
+
+<tr>
+<td><tt>Start:</tt></td>
+
+<td><tt>$7ef0; sys32497</tt></td>
+
+<td><tt>Original gamemodul: $5997; sys22935&nbsp;</tt>
+<br><tt>Softkillerpacker: $5997; sys22935&nbsp;</tt>
+<br><tt>Knibblepacker v1-v2.x: $27f6; sys10230&nbsp;</tt>
+<br><tt>Knibblepacker v3 intro: $1cc0; sys7360&nbsp;</tt>
+<br><tt>Knibblepacker v3 game: $6b00; sys27392&nbsp;</tt>
+<br><tt>No One Packer beta (has ASCII-Intro): $0b00; sys2816&nbsp;</tt>
+<br><tt>No One Packer 2.x: $27a0; sys10144&nbsp;</tt>
+<br><tt>No One Packer 5.x: $6700; sys26368&nbsp;</tt>
+<br><tt>Rockford packer with highscores: $67a0; sys26528</tt></td>
+
+<td><tt>$59b9; sys22969</tt></td>
+</tr>
+
+<tr>
+<td><tt>Program:</tt></td>
+
+<td><tt>$2800-$8187</tt></td>
+
+<td><tt>$2800-$7000 (without the caves)&nbsp;</tt>
+<br><tt>in addition to that:&nbsp;</tt>
+<br><tt>Knibblepacker v2.x: $2700-$b500&nbsp;</tt>
+<br><tt>No One Packer beta: $0b00-$0c20 for intro text&nbsp;</tt>
+<br><tt>No One Packer v2.x: $27a0-$27ff, $9a00-$9de8</tt></td>
+
+<td><tt>$2800-$6f00 (without the caves)</tt></td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><tt>Caves:</tt></td>
+
+<td style="vertical-align: top;"><tt>$be00-$bff0 generated after a save
+action.</tt></td>
+
+<td COLSPAN="2" style="vertical-align: top;"><tt>Beginning with $7000 in
+steps of $0200 Bytes for each cave. Max. 48 (Atari 60) caves.</tt>
+<br><tt>At the beginning of the first unused cave slot, there are 16 $00
+bytes, which has to be saved with the game, except when all slots are used.</tt></td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><tt>Selection Table:</tt></td>
+
+<td style="vertical-align: top;"></td>
+
+<td style="vertical-align: top;"><tt>$5e8b: 13 byte per cave</tt>
+<ul>
+<li>
+<tt>bytes $00-$0c: file name of cave</tt></li>
+
+<li>
+<tt>byte&nbsp; $0d: is selectable</tt></li>
+
+<ul>
+<li>
+<tt>$19 = cave can be selected</tt></li>
+
+<li>
+<tt>$0e = cave can not be selected</tt></li>
+
+<li>
+<tt>$00 = no cave present&nbsp;</tt></li>
+</ul>
+</ul>
+<tt>Levelpacker since No One 5.x left out the names, so there is only one
+byte per entry.</tt></td>
+
+<td style="vertical-align: top;"></td>
+</tr>
+</table>
+
+<p><tt>Format of a C64 BoulderDash Construction Kit file:</tt>
+<p><tt>Offset&nbsp; Bytes&nbsp; Range&nbsp; Description</tt>
+<br><tt>------&nbsp; -----&nbsp; -----&nbsp; -----------</tt>
+<br><tt>0000&nbsp;&nbsp;&nbsp; 0013&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+unused. Usually filled with $44 (code for titanium wall), but don't count
+on that.</tt>
+<br><tt>0014&nbsp;&nbsp;&nbsp; 01b7&nbsp;&nbsp;&nbsp; 0- F&nbsp; 840 nybbles
+of cave description (without the bottom border)</tt>
+<br><tt>01b8&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-14&nbsp; Cave delay
+(00 = fast, $14 = slow)</tt>
+<br><tt>01ba&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Cave time in
+seconds (1 second = 60 TV fields)</tt>
+<br><tt>01bc&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-63&nbsp; Diamonds needed</tt>
+<br><tt>01be&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-63&nbsp; Diamond value</tt>
+<br><tt>01c0&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-63&nbsp; Bonus Diamond
+value</tt>
+<br><tt>01c2&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-08&nbsp; Slime permeability
+(is translated to a bit pattern by the engine)</tt>
+<br><tt>01c4&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Amoeba time
+at slow growth</tt>
+<br><tt>01c6&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Magic Wall
+milling time</tt>
+<br><tt>01da&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=cave, >0=intermission</tt>
+<br><tt>01db&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Border color</tt>
+<br><tt>01dd&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Background
+color</tt>
+<br><tt>01df&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
+color 1</tt>
+<br><tt>01e1&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
+color 2</tt>
+<br><tt>01e3&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
+color 3</tt>
+<br><tt>In Diego effect enabled engines, there are:</tt>
+<br><tt>01e5&nbsp;&nbsp;&nbsp; 0003&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+For detection. If there are diego effects, these are $20 $90 $46</tt>
+<br><tt>01ea&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-3F&nbsp; A Bouncing
+Boulder converts to this element</tt>
+<br><tt>01eb&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-3F&nbsp; A Falling Diamonds
+converts to this element</tt>
+<br><tt>01ec&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-3F&nbsp; An Explosion
+converts to this element</tt>
+<br><tt>01ed&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Pointer to Dirt graphic</tt>
+<br><tt>01ee&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Pointer to Growing Wall graphic</tt>
+<br><tt>01ef&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-ff&nbsp; Maximum Amoeba
+size</tt>
+<p><tt>Nybble Codes (the High Nybble is drawn first)</tt>
+<br><tt>0 Boulder</tt>
+<br><tt>1 Diamond</tt>
+<br><tt>2 Magic Wall</tt>
+<br><tt>3 Brick Wall</tt>
+<br><tt>4 Titanium Wall</tt>
+<br><tt>5 Growing Wall</tt>
+<br><tt>6 Mrs. Rockford</tt>
+<br><tt>7 Dirt</tt>
+<br><tt>8 Firefly</tt>
+<br><tt>9 Butterfly</tt>
+<br><tt>A Amoeba</tt>
+<br><tt>B Slime</tt>
+<br><tt>C Hidden Exit</tt>
+<br><tt>D Visible Exit</tt>
+<br><tt>E Inbox</tt>
+<br><tt>F Space</tt>
+<p><tt>Text character set: $2800-$2bb0 (Some are unused)</tt>
+<br><tt>Graphics character set: $2bb0-$2db0, $3100-$3900</tt>
+<br><tt>Title music: $3000-$3100</tt>
+<br><tt>Original Boulder Dash Logo (Gamemodul, Softkiller packer and Rockford
+packer): $3900-$3b00</tt>
+<br><tt>Title Screen (may include Highscores), as used in most other level
+packers: $6000-$63e8</tt>
+<h3>
+<a NAME="1stB-Engine"></a><tt><font size=+2><b>1stB</b>-Engine</font></tt></h3>
+<tt>Prof. Knibble called it "New Boulder Dash Engine", though as it was
+not that apparent in the games, it became commonly known asthe "First Boulder
+Engine".</tt>
+<p><tt>Start: $1fa9 ($695a for the "First Boulder Dash"-games)</tt>
+<br><tt>Program: $1f00-$c119 (some cave lay inbetween.)</tt>
+<br><tt>Intro screens may be present at $0c00-$13e8 and will be overwritten
+during the game.</tt>
+<br><tt>Title music: $5e18-$5f18</tt>
+<br><tt>Title screen: $6000-$63e8</tt>
+<br><tt>Caves: $7010-$bfbe. Beginning with $7010 in steps of $0400 bytes
+for each cave. There are opcodes between some caves. There must be 20 caves
+in total.</tt>
+<br><tt>Size per cave entry: $03ae byte</tt>
+<br><tt>Name of Highscoresfile: $63f0-$6400</tt>
+<br><tt>Selection table: $3cd0-$3ce4 (1 byte per cave</tt>
+<ul>
+<li>
+<tt>$00 = cave can be selected</tt></li>
+
+<li style="font-family: courier new,monospace;">
+<tt>$01 = cave can not be selected</tt></li>
+</ul>
+
+<div style="font-family: courier new,monospace;"><tt>Three byte values
+are BCD encoded numbers. MSB first ($00..$0f).</tt></div>
+
+<p><br><tt>Booleans are true if value&lt;>0.</tt>
+<br><tt>Pattern means, all bits have equal value.</tt>
+<p><tt>Format of a <b>1stB</b> cave file (decompressed):</tt>
+<p><tt>Offset&nbsp; Bytes&nbsp; Range&nbsp; Description</tt>
+<br><tt>------&nbsp; -----&nbsp; -----&nbsp; -----------</tt>
+<br><tt>0000&nbsp;&nbsp;&nbsp; 0370&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+880 byte of cave description (including all borders)</tt>
+<br><tt>0370&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Cave time in seconds
+(1 second = 60 TV fields)</tt>
+<br><tt>0373&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Diamonds needed</tt>
+<br><tt>0376&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Bonus Diamond value</tt>
+<br><tt>0379&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Diamond value</tt>
+<br><tt>037C&nbsp;&nbsp;&nbsp; 0002&nbsp; 000-999 Amoeba time at slow growth
+(MSB first)</tt>
+<br><tt>037E&nbsp;&nbsp;&nbsp; 0002&nbsp; 000-999 Magic Wall milling time
+(MSB first)</tt>
+<br><tt>0380&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; Firefly and
+Butterfly direction change automation.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0=off, >0=on</tt>
+<br><tt>0381&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Firefly and
+Butterfly direction change delay.</tt>
+<br><tt>0381&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; Diagonal walking</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0=off, >0=on</tt>
+<br><tt>(Yes, it's used twice and it's a known bug)</tt>
+<br><tt>0382&nbsp;&nbsp;&nbsp; 0001&nbsp; pattern Amoeba slow growth probability</tt>
+<br><tt>0383&nbsp;&nbsp;&nbsp; 0001&nbsp; pattern Amoeba fast growth probability</tt>
+<br><tt>0384&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Border color</tt>
+<br><tt>0385&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Background
+color</tt>
+<br><tt>0386&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
+color 1</tt>
+<br><tt>0387&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
+color 2</tt>
+<br><tt>0388&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
+color 3</tt>
+<br><tt>0389&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=cave, >0=intermission</tt>
+<br><tt>038A&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-14&nbsp; Cave delay
+(00 = fast, $14 = slow)</tt>
+<br><tt>038B&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Slime permeability</tt>
+<br><tt>038C&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=normal intermission,
+1=scrolling intermission (buggy)</tt>
+<br><tt>038D&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Magic Wall Sound $F0=on, $D0=silent</tt>
+<br><tt>038E&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Growing Wall direction $2E=horizontal, $2F=vertical</tt>
+<br><tt>038F&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Firefly and Butterfly direction $2C=forward, $2D=backwards</tt>
+<br><tt>0390&nbsp;&nbsp;&nbsp; 0002&nbsp; 000-880 Maximum Amoeba size (MSB
+first)</tt>
+<br><tt>0392&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Extra time
+per collected Clock</tt>
+<br><tt>0393&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Time penalty</tt>
+<br><tt>0394&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-03&nbsp; Biter delay</tt>
+<br><tt>0395&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; Magic Wall
+activation will convert Amoeba. 0=on, 1=off</tt>
+<br><tt>0396&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Bomb Explosion
+converts to this element</tt>
+<br><tt>0397&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; An Explosion
+converts to this element</tt>
+<br><tt>0398&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Bouncing
+Boulder converts to this element</tt>
+<br><tt>0399&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Diamond Birth
+converts to this element</tt>
+<br><tt>039A&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Diamond falling
+into a Magic Wall converts to this element</tt>
+<br><tt>039B&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Bladder has
+to touch this element in order to convert</tt>
+<br><tt>039C&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Falling Diamond
+converts to this element</tt>
+<br><tt>039D&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Biters eat
+this element</tt>
+<br><tt>039E, 039F&nbsp;&nbsp;&nbsp;&nbsp; 00-7F&nbsp; Two elements penetrating
+Slime (adding $03 while doing this)</tt>
+<br><tt>03A0&nbsp;&nbsp;&nbsp; 0003&nbsp; string&nbsp; Version "V2.2" or
+"2.6". V2.0 did not have this.</tt>
+<br><tt>03A0&nbsp;&nbsp;&nbsp; 000E&nbsp; string&nbsp; Name of cave using
+the internal character codes. This was implemented in V2.2. The Cavepacker
+overwrites the Version string while packing the game.</tt>
+<p><tt>Since V2.1, the construction kit uses a run length compression scheme
+when saving a cave to disk. The cavepacker decompresses the caves and stores
+the 20 caves in an uncompressed file.</tt>
+<h3>
+<a NAME="CrDr-Engine"></a><tt><font size=+2>CrDr-Engine</font></tt></h3>
+<tt>Start: $1fa9</tt>
+<br><tt>Program: $1f00-$cfff (some cave lay inbetween.)</tt>
+<br><tt>Intro screens may be present at $0c00-$13e8 and will be overwritten
+during the game.</tt>
+<br><tt>Title screen: $6000-$63e8</tt>
+<br><tt>There can be up to 100 caves, using the following memory ranges:</tt>
+<br><tt>&nbsp;&nbsp; $7600-$77ff, $7810-$7bff, $7c10-$7fff, $8010-$83ff,</tt>
+<br><tt>&nbsp;&nbsp; $8410-$87ff, $8810-$8bff, $9240-$9aff, $9bb8-$9fff</tt>
+<br><tt>Name of Highscoresfile: $63f0-$6400</tt>
+<br><tt>Selection table: $7410-$7473 (1 byte per cave)</tt>
+<ul>
+<li>
+<tt>$00 = cave can be selected</tt></li>
+
+<li style="font-family: courier new,monospace;">
+<tt>$01 = cave can not be selected</tt></li>
+</ul>
+<tt>Three byte values are BCD encoded numbers. MSB first ($00..$0f).</tt>
+<br><tt>Booleans are true if value&lt;>0.</tt>
+<br><tt>Pattern means, all bits have equal value.</tt>
+<br><tt>Cave names: $8c00-$923f, 16 byte per cave</tt>
+<ul>
+<li>
+<tt>Bytes 00-0d: letters using the internal character codes</tt></li>
+
+<li>
+<tt>Bytes 0e-0f: unused</tt></li>
+</ul>
+<tt>Cave pointers LSB: $7500-$7564</tt>
+<br><tt>Cave pointers MSB: $7580-$75e4</tt>
+<p><tt>The cave data (beginning at offset $49) is broken into variable
+sized records where the first byte is the structure code. Depending on
+the structure to create, there are 3, 5, 6 or 8 bytes of parameters that
+follow.</tt>
+<br><tt>A cave can have up to 1024 byte. Valid positions are column=0..39
+and row=0..21 whereas 0;0 is the top left corner on the border.</tt>
+<br><tt>The random number generator works exactly like in <b>BD2</b> and
+is also used for the Slime permeability.</tt>
+
+<p style="font-family: courier new,monospace;"><tt>Three byte values are
+BCD encoded numbers. MSB first ($00..$0f).</tt>
+<br><tt>Booleans are true if value&lt;>0.</tt>
+<br><tt>Pattern means, all bits have equal value.</tt>
+<p><tt>Format of a <b>CrDr</b> cave file:</tt>
+<p><tt>Offset&nbsp; Bytes&nbsp; Range&nbsp; Description</tt>
+<br><tt>------&nbsp; -----&nbsp; -----&nbsp; -----------</tt>
+<br><tt>0000&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Cave time in seconds
+(1 second = 60 TV fields)</tt>
+<br><tt>0003&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Diamonds needed</tt>
+<br><tt>0006&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Bonus Diamond value</tt>
+<br><tt>0009&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Diamond value</tt>
+<br><tt>000C&nbsp;&nbsp;&nbsp; 0002&nbsp; 000-999 Amoeba time at slow growth
+(MSB first)</tt>
+<br><tt>000E&nbsp;&nbsp;&nbsp; 0002&nbsp; 000-999 Magic Wall milling time
+(MSB first)</tt>
+<br><tt>0010&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; Firefly and
+Butterfly direction change automation.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0=off, >0=on</tt>
+<br><tt>0011&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Firefly and
+Butterfly direction change delay.</tt>
+<br><tt>0012&nbsp;&nbsp;&nbsp; 0001&nbsp; pattern Amoeba slow growth probability</tt>
+<br><tt>0013&nbsp;&nbsp;&nbsp; 0001&nbsp; pattern Amoeba fast growth probability</tt>
+<br><tt>0014&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Border color</tt>
+<br><tt>0015&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Background
+color</tt>
+<br><tt>0016&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
+color 1</tt>
+<br><tt>0017&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
+color 2</tt>
+<br><tt>0018&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
+color 3</tt>
+<br><tt>0019&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=cave, >0=intermission</tt>
+<br><tt>001A&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-14&nbsp; Cave delay
+(00 = fast, $14 = slow)</tt>
+<br><tt>001B&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Slime permeability</tt>
+<br><tt>001C&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=normal intermission,
+1=scrolling intermission (buggy)</tt>
+<br><tt>001D&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Magic Wall Sound $F0=on, $D0=silent</tt>
+<br><tt>001E&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Growing Wall direction $2E=horizontal, $2F=vertical</tt>
+<br><tt>001F&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Firefly and Butterfly direction $2C=forward, $2D=backwards</tt>
+<br><tt>0020&nbsp;&nbsp;&nbsp; 0002&nbsp; 000-880 Maximum Amoeba size (MSB
+first)</tt>
+<br><tt>0022&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Extra time
+per collected Clock</tt>
+<br><tt>0023&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Time penalty</tt>
+<br><tt>0024&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-03&nbsp; Biter delay</tt>
+<br><tt>0025&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; Magic Wall
+activation will convert Amoeba. 0=on, 1=off</tt>
+<br><tt>0026&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; A Bomb Explosion
+converts to this element</tt>
+<br><tt>0027&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; An Explosion
+converts to this element</tt>
+<br><tt>0028&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; A Bouncing
+Boulder converts to this element</tt>
+<br><tt>0029&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; A Diamond Birth
+converts to this element</tt>
+<br><tt>002A&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; A Diamond falling
+into a Magic Wall converts to this element</tt>
+<br><tt>002B&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; A Bladder has
+to touch this element in order to convert</tt>
+<br><tt>002C&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; A Falling Diamond
+converts to this element</tt>
+<br><tt>002D&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Biters eat
+this element</tt>
+<br><tt>002E, 002F&nbsp;&nbsp;&nbsp;&nbsp; 00-FF&nbsp; Two elements penetrating
+Slime (adding $03 while doing this)</tt>
+<br><tt>0030&nbsp;&nbsp;&nbsp; 0003&nbsp; string&nbsp; Version "V4.0".</tt>
+<br><tt>0034&nbsp;&nbsp;&nbsp; 0001 switches bit 0:&nbsp;&nbsp; Diagonal
+walking</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+bit 1-7: not used</tt>
+<br><tt>0035&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Delay of gravitation
+change</tt>
+<br><tt>0036&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Time for Pneumatic
+Hammer</tt>
+<br><tt>0037&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Time for hammered
+Walls to reappear</tt>
+<br><tt>0038&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Acid speed</tt>
+<br><tt>0039&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Acid eats this
+element</tt>
+<br><tt>003a&nbsp;&nbsp;&nbsp; 0001 switches bit 0-1: gravitation</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+00: up</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+01: down</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+10: left</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+11: right</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+bit 2:&nbsp;&nbsp; snap Explosions</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+bit 3-7: not used</tt>
+<br><tt>003b&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Pointer to Growing Wall graphic</tt>
+<br><tt>003c&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Pointer to Dirt graphic</tt>
+<br><tt>003d&nbsp;&nbsp;&nbsp; 0002&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+not used</tt>
+<br><tt>003f&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; >0=hammered
+Walls will reappear</tt>
+<br><tt>0040&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Initial randomiser
+seed value</tt>
+<br><tt>0041&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Random element
+number 1</tt>
+<br><tt>0042&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Random element
+number 2</tt>
+<br><tt>0043&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Random element
+number 3</tt>
+<br><tt>0044&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Random element
+number 4</tt>
+<br><tt>0045&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Probability
+of element 1</tt>
+<br><tt>0046&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Probability
+of element 2</tt>
+<br><tt>0047&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Probability
+of element 3</tt>
+<br><tt>0048&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Probability
+of element 4</tt>
+<br><tt>0049 onwards: cave data, deliminated with $FF.</tt>
+
+<p style="font-family: courier new,monospace;"><tt>The structure codes
+are:</tt>
+<ul style="font-family: courier new,monospace;">
+<li>
+<tt>$01 = draw a single object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: column</tt></li>
+
+<li>
+<tt>param byte 3: row</tt></li>
+</ul>
+
+<li>
+<tt>$02 = draw a rectangle of an object, don't modify the insides</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: top left column</tt></li>
+
+<li>
+<tt>param byte 3: top left row</tt></li>
+
+<li>
+<tt>param byte 4: length</tt></li>
+
+<li>
+<tt>param byte 5: height</tt></li>
+</ul>
+
+<li>
+<tt>$03 = draw a filled rectangle of an object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: top left row</tt></li>
+
+<li>
+<tt>param byte 3: top left column</tt></li>
+
+<li>
+<tt>param byte 4: height</tt></li>
+
+<li>
+<tt>param byte 5: length</tt></li>
+</ul>
+
+<li>
+<tt>$04 = draw a line of an object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: begin column</tt></li>
+
+<li>
+<tt>param byte 3: begin row</tt></li>
+
+<li>
+<tt>param byte 4: length</tt></li>
+
+<li>
+<tt>param byte 5: direction code relative to $80. (Comon values are $58=up,
+$59=up/right, $81=right, $A9=down/right, $A8=down, $A7=down/left, $7F=left,
+$57=up/left)</tt></li>
+</ul>
+
+<li>
+<tt>$0B = draw a raster pattern of an object</tt></li>
+
+<ul>
+<li>
+<tt>param byte 1: object to draw</tt></li>
+
+<li>
+<tt>param byte 2: top left column</tt></li>
+
+<li>
+<tt>param byte 3: top left row</tt></li>
+
+<li>
+<tt>param byte 4: discance between columns</tt></li>
+
+<li>
+<tt>param byte 5: distance between rows</tt></li>
+
+<li>
+<tt>param byte 6: amount of columns</tt></li>
+
+<li>
+<tt>param byte 7: amount of rows</tt></li>
+</ul>
+</ul>
+
+<h3>
+<a NAME="CrLi-Engine"></a><tt><font size=+2>CrLi-Engine</font></tt></h3>
+<tt>Start: $5e97; sys24215 (use this when crunching the game)</tt>
+<br><tt>Start with drive 8 forced on: $1f05; sys7941 (use this for debugging)</tt>
+<br><tt>Program: $1f03-$6ffc, $cc00-$d000</tt>
+<br><tt>Title screen: $6000-$63e8</tt>
+<p><tt>Character set file: $26a0-$3b00</tt>
+<br><tt>$3368 Version "V3.0"</tt>
+<br><tt>For details see <a href="#Graphic character">graphic character
+set</a>.</tt><tt></tt>
+<p><tt>Introscreen file: $0c00-$0fec</tt>
+<br><tt>$0c00-$0fe8 Screen</tt>
+<br><tt>$0fe9 Border color</tt>
+<br><tt>$0fea Background color</tt>
+<br><tt>$0feb Foreground color</tt><tt></tt>
+<p><tt>Title screen file: $5ed9-$6398</tt>
+<br><tt>$5ed9-$5edc Version "V3.0"</tt>
+<br><tt>$5edd-$5fdc Title music</tt>
+<br><tt>$5fdd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Music waveform</tt>
+<br><tt>$5fde&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Music envelope voice
+1</tt>
+<br><tt>$5fdf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Music envelope voice
+2</tt>
+<br><tt>$5fe0-$5ff7 Color nybbles one for each line. The high nybble is
+used for big letters, and the lower nybble for other chars.</tt>
+<br><tt>$5ff8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Regular cave name color</tt>
+<br><tt>$5ff9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Last played cave name
+color</tt>
+<br><tt>$5ffa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Border color</tt>
+<br><tt>$5ffb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Background color</tt>
+<br><tt>$5ffc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Foreground color 1</tt>
+<br><tt>$5ffd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Foreground color 2</tt>
+<br><tt>$5ffe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No effect ($d024)</tt>
+<br><tt>$5fff&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; not used</tt>
+<br><tt>$6000-$6398 Title screen (first 23 lines)</tt>
+<p><tt>Cavepack file: $6ffc-$cbff (max.)</tt>
+<br><tt>$6ffc-$6fff Version "V3.0"</tt>
+<br><tt>$7000-$702f Cave pointers LSB</tt>
+<br><tt>$7030-$705f Cave pointers MSB</tt>
+<br><tt>$7060-$708f Selection table</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$00 = cave can be selected</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$01 = cave can not be selected</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$ff = no cave present</tt>
+<br><tt>$7090&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $ff (end of selection
+table)</tt>
+<br><tt>$7091-$7093 Patch code. The engine does a JSR $7091 during initialisation.
+default=$60 $60 $60=RTS</tt>
+<br><tt>$70a2-$cbff Names and caves</tt>
+<br><tt>The names are stored right in front of the caves and have always
+14 bytes.</tt>
+<br><tt>There can be up to 48 caves.</tt>
+<br><tt>Name of Highscoresfile: $63f0-$6400</tt>
+<p><tt>Caves are compressed with a run length encoded algorythm and are
+decompressed during run time directly into the working array. The parameters
+are copied to $0370. The escape byte is $bf, followed by the repeated byte
+value and the byte count. A cavefile starts at $c400 with the string "DLP".</tt>
+<div style="font-family: courier new,monospace;">&nbsp;
+<br><tt>Three byte values are BCD encoded numbers. MSB first ($00..$0f).</tt></div>
+
+<p><br><tt>Booleans are true if value&lt;>0.</tt>
+<br><tt>Pattern means, all bits have equal value.</tt>
+<p><tt>Format of a <b>CrLi</b> cave file (decompressed):</tt>
+<p><tt>Offset&nbsp; Bytes&nbsp; Range&nbsp; Description</tt>
+<br><tt>------&nbsp; -----&nbsp; -----&nbsp; -----------</tt>
+<br><tt>0000&nbsp;&nbsp;&nbsp; 0370&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+880 byte of cave description (including all borders)</tt>
+<br><tt>0370&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Cave time in seconds
+(this seconds are for real on both NTSC and PAL systems)</tt>
+<br><tt>0373&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Diamonds needed</tt>
+<br><tt>0376&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Bonus Diamond value</tt>
+<br><tt>0379&nbsp;&nbsp;&nbsp; 0003&nbsp; 000-999 Diamond value</tt>
+<br><tt>037C&nbsp;&nbsp;&nbsp; 0002&nbsp; 000-999 Amoeba time at slow growth
+(MSB first)</tt>
+<br><tt>037E&nbsp;&nbsp;&nbsp; 0002&nbsp; 000-999 Magic Wall milling time
+(MSB first)</tt>
+<br><tt>0380&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; Firefly and
+Butterfly direction change automation.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0=off, >0=on</tt>
+<br><tt>0381&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Firefly and
+Butterfly direction change delay.</tt>
+<br><tt>0382&nbsp;&nbsp;&nbsp; 0001&nbsp; pattern Amoeba slow growth probability</tt>
+<br><tt>0383&nbsp;&nbsp;&nbsp; 0001&nbsp; pattern Amoeba fast growth probability</tt>
+<br><tt>0384&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Border color</tt>
+<br><tt>0385&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Background
+color</tt>
+<br><tt>0386&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
+color 1</tt>
+<br><tt>0387&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-0F&nbsp; Foreground
+color 2</tt>
+<br><tt>0388&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-07&nbsp; Foreground
+color 3</tt>
+<br><tt>0389&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=cave, >0=intermission</tt>
+<br><tt>038A&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-14&nbsp; Cave delay
+(00 = fast, $14 = slow)</tt>
+<br><tt>038B&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Slime permeability</tt>
+<br><tt>038C&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; 0=normal intermission,
+1=scrolling intermission (buggy)</tt>
+<br><tt>038D&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Magic Wall Sound $F0=on, $D0=silent</tt>
+<br><tt>038E&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Growing Wall direction $2E=horizontal, $2F=vertical</tt>
+<br><tt>038F&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Firefly and Butterfly direction $2C=forward, $2D=backwards</tt>
+<br><tt>0390&nbsp;&nbsp;&nbsp; 0002&nbsp; 000-880 Maximum Amoeba size (MSB
+first)</tt>
+<br><tt>0392&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Extra time
+per collected Clock</tt>
+<br><tt>0393&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Time penalty</tt>
+<br><tt>0394&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-03&nbsp; Biter delay</tt>
+<br><tt>0395&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; Magic Wall
+activation will convert Amoeba. 0=on, 1=off</tt>
+<br><tt>0396&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Bomb Explosion
+converts to this element</tt>
+<br><tt>0397&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; An Explosion
+converts to this element</tt>
+<br><tt>0398&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Bouncing
+Boulder converts to this element</tt>
+<br><tt>0399&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Diamond Birth
+converts to this element</tt>
+<br><tt>039A&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Diamond falling
+into a Magic Wall converts to this element</tt>
+<br><tt>039B&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Bladder has
+to touch this element in order to convert</tt>
+<br><tt>039C&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; A Falling Diamond
+converts to this element</tt>
+<br><tt>039D&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Biters eat
+this element</tt>
+<br><tt>039E, 039F&nbsp;&nbsp;&nbsp;&nbsp; 00-7F&nbsp; Two elements penetrating
+Slime (adding $03 while doing this)</tt>
+<br><tt>03A0&nbsp;&nbsp;&nbsp; 0003&nbsp; string&nbsp; Version "V3.0"</tt>
+<br><tt>03A4&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-01&nbsp; Diagonal walking</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0=off, >0=on</tt>
+<br><tt>03A5&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00&nbsp;&nbsp;&nbsp;&nbsp;
+reserved</tt>
+<br><tt>03A6&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Too big Amoeba
+converts to this element</tt>
+<br><tt>03A7&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Enclosed Amoeba
+converts to this element</tt>
+<br><tt>03A8&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-FF&nbsp; Acid speed</tt>
+<br><tt>03A9&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Acid eats this
+element</tt>
+<br><tt>03AA&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 01&nbsp;&nbsp;&nbsp;&nbsp;
+reserved</tt>
+<br><tt>03AB&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Growing Wall
+looks like this element</tt>
+<br><tt>03AC&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 00-7F&nbsp; Dirt looks
+like this element</tt>
+<br><tt>03AD&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 01&nbsp;&nbsp;&nbsp;&nbsp;
+reserved</tt>
+<br><tt>03AE&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 01&nbsp;&nbsp;&nbsp;&nbsp;
+reserved</tt>
+<br><tt>03AF&nbsp;&nbsp;&nbsp; 0001&nbsp;&nbsp; 01&nbsp;&nbsp;&nbsp;&nbsp;
+reserved</tt>
+<p><a NAME="Objects"></a><b><tt><font size=+2>Boulder Dash Objects:</font></tt></b>
+<table BORDER >
+<tr>
+<td></td>
+
+<td><tt><b>BD1</b>, <b>BD2</b>, <b>PLCK</b></tt></td>
+
+<td><b><tt>1stB</tt></b></td>
+
+<td><b><tt>CrDr</tt></b></td>
+
+<td><b><tt>CrLi</tt></b></td>
+</tr>
+
+<tr>
+<td><tt>$00</tt></td>
+
+<td COLSPAN="4"><tt>Space</tt></td>
+</tr>
+
+<tr>
+<td><tt>$01</tt></td>
+
+<td COLSPAN="4"><tt>Dirt</tt></td>
+</tr>
+
+<tr>
+<td><tt>$02</tt></td>
+
+<td COLSPAN="4"><tt>Brick Wall</tt></td>
+</tr>
+
+<tr>
+<td><tt>$03</tt></td>
+
+<td COLSPAN="4"><tt>Magic Wall</tt></td>
+</tr>
+
+<tr>
+<td><tt>$04</tt></td>
+
+<td COLSPAN="4"><tt>Exit</tt></td>
+</tr>
+
+<tr>
+<td><tt>$05</tt></td>
+
+<td COLSPAN="4"><tt>Exit open</tt></td>
+</tr>
+
+<tr>
+<td><tt>$06</tt></td>
+
+<td><tt>Destructible Titanium Wall*</tt></td>
+
+<td style="vertical-align: top;"><tt>Hidden Exit</tt></td>
+</tr>
+
+<tr>
+<td><tt>$07</tt></td>
+
+<td><tt>Titanium Wall</tt></td>
+
+<td style="vertical-align: top;"><tt>Hidden Exit open</tt></td>
+</tr>
+
+<tr>
+<td><tt>$08-$0b</tt></td>
+
+<td COLSPAN="4"><tt>Firefly (left, up, right and down)</tt></td>
+</tr>
+
+<tr>
+<td><tt>$0c-$0f</tt></td>
+
+<td COLSPAN="4"><tt>Firefly delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$10</tt></td>
+
+<td COLSPAN="4"><tt>Boulder</tt></td>
+</tr>
+
+<tr>
+<td><tt>$11</tt></td>
+
+<td COLSPAN="4"><tt>Boulder delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$12</tt></td>
+
+<td COLSPAN="4"><tt>Boulder falling</tt></td>
+</tr>
+
+<tr>
+<td><tt>$13</tt></td>
+
+<td COLSPAN="4"><tt>Boulder falling delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$14</tt></td>
+
+<td COLSPAN="4"><tt>Diamond</tt></td>
+</tr>
+
+<tr>
+<td><tt>$15</tt></td>
+
+<td COLSPAN="4"><tt>Diamond delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$16</tt></td>
+
+<td COLSPAN="4"><tt>Diamond falling</tt></td>
+</tr>
+
+<tr>
+<td><tt>$17</tt></td>
+
+<td COLSPAN="4"><tt>Diamond falling delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$18</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Clock Birth stage 1</tt></td>
+</tr>
+
+<tr>
+<td><tt>$19</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Clock Birth stage 2</tt></td>
+</tr>
+
+<tr>
+<td><tt>$1a</tt></td>
+
+<td><tt>Explosion stage 1</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Clock Birth stage 4</tt></td>
+</tr>
+
+<tr>
+<td><tt>$1b</tt></td>
+
+<td><tt>Explosion stage 2</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Clock Birth stage 4</tt></td>
+</tr>
+
+<tr>
+<td><tt>$1c</tt></td>
+
+<td><tt>Explosion stage 3</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Biter Switch</tt></td>
+</tr>
+
+<tr>
+<td><tt>$1d</tt></td>
+
+<td><tt>Explosion stage 4</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Biter Switch delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$1e</tt></td>
+
+<td><tt>Explosion stage 5</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>T</tt></td>
+</tr>
+
+<tr>
+<td><tt>$1f-$24</tt></td>
+
+<td COLSPAN="4"><tt>Diamond Birth stages</tt></td>
+</tr>
+
+<tr>
+<td><tt>$25</tt></td>
+
+<td COLSPAN="4"><tt>Inbox</tt></td>
+</tr>
+
+<tr>
+<td><tt>$26-$29</tt></td>
+
+<td COLSPAN="4"><tt>Rockford Birth stages</tt></td>
+</tr>
+
+<tr>
+<td><tt>$2a</tt></td>
+
+<td COLSPAN="4"><tt>Growing Wall*</tt></td>
+</tr>
+
+<tr>
+<td><tt>$2b</tt></td>
+
+<td COLSPAN="4"><tt>Growing Wall delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$2c</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Firefly/Butterfly Switch</tt></td>
+</tr>
+
+<tr>
+<td><tt>$2d</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Firefly/Butterfly Switch delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$2e</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Growing Wall Switch</tt></td>
+</tr>
+
+<tr>
+<td><tt>$2f</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Growing Wall Switch delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$30-$33</tt></td>
+
+<td COLSPAN="4"><tt>Butterfly (down, left, up and right)</tt></td>
+</tr>
+
+<tr>
+<td><tt>$34-$37</tt></td>
+
+<td COLSPAN="4"><tt>Butterfly delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$38</tt></td>
+
+<td><tt>Rockford</tt></td>
+
+<td COLSPAN="3"><tt>Titanium Wall</tt></td>
+</tr>
+
+<tr>
+<td><tt>$39</tt></td>
+
+<td><tt>Rockford delayed</tt></td>
+
+<td COLSPAN="3" style="vertical-align: top;"><tt>Slime</tt></td>
+</tr>
+
+<tr>
+<td><tt>$3a</tt></td>
+
+<td><tt>Amoeba</tt></td>
+
+<td COLSPAN="3"><tt>Bomb</tt></td>
+</tr>
+
+<tr>
+<td><tt>$3b</tt></td>
+
+<td><tt>Amoeba delayed</tt></td>
+
+<td COLSPAN="3"><tt>Sweet</tt></td>
+</tr>
+
+<tr>
+<td><tt>$3c</tt></td>
+
+<td><tt>Mrs. Rockford*</tt></td>
+
+<td COLSPAN="3"><tt>Boulder Birth stage 1</tt></td>
+</tr>
+
+<tr>
+<td><tt>$3d</tt></td>
+
+<td><tt>Hidden Exit*</tt></td>
+
+<td COLSPAN="3"><tt>Boulder Birth stage 2</tt></td>
+</tr>
+
+<tr>
+<td><tt>$3e</tt></td>
+
+<td><tt>Slime*</tt></td>
+
+<td COLSPAN="3"><tt>Boulder Birth stage 3</tt></td>
+</tr>
+
+<tr>
+<td><tt>$3f</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Boulder Birth stage 4</tt></td>
+</tr>
+
+<tr>
+<td><tt>$40</tt></td>
+
+<td><tt>Hidden Exit open*</tt></td>
+
+<td COLSPAN="3"><tt>Bladder</tt></td>
+</tr>
+
+<tr>
+<td><tt>$41-$49</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Bladder waiting stages</tt></td>
+</tr>
+
+<tr>
+<td><tt>$4a-$4f</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Explosion stages</tt></td>
+</tr>
+
+<tr>
+<td><tt>$50</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Rockford</tt></td>
+</tr>
+
+<tr>
+<td><tt>$51</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Rockford delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$52</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Rockford carrying Bomb</tt></td>
+</tr>
+
+<tr>
+<td><tt>$53</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Rockford carrying Bomb delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$54</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Rockford glued</tt></td>
+</tr>
+
+<tr>
+<td><tt>$55</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Rockford glued delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$56</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Mrs. Rockford</tt></td>
+</tr>
+
+<tr>
+<td><tt>$57</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Amoeba</tt></td>
+</tr>
+
+<tr>
+<td><tt>$58</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Amoeba delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$59-$5f</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Bomb Ticking stages</tt></td>
+</tr>
+
+<tr>
+<td><tt>$60-$63</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Bomb Explosion stages</tt></td>
+</tr>
+
+<tr>
+<td><tt>$64</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Ghost</tt></td>
+
+<td><tt>Acid</tt></td>
+</tr>
+
+<tr>
+<td><tt>$65</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Ghost delayed</tt></td>
+
+<td><tt>Acid delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$66</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Ghost Explosion stage 1</tt></td>
+
+<td><tt>Falling Wall</tt></td>
+</tr>
+
+<tr>
+<td><tt>$67</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Ghost Explosion stage 2</tt></td>
+
+<td><tt>Falling Wall falling</tt></td>
+</tr>
+
+<tr>
+<td><tt>$68</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Ghost Explosion stage 3</tt></td>
+
+<td><tt>Falling Wall falling delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$69</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Ghost Explosion stage 4</tt></td>
+
+<td><tt>Box</tt></td>
+</tr>
+
+<tr>
+<td><tt>$6a</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Gravestone</tt></td>
+</tr>
+
+<tr>
+<td><tt>$6b</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Boulder glued</tt></td>
+</tr>
+
+<tr>
+<td><tt>$6c</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Diamond glued (not collectible)</tt></td>
+</tr>
+
+<tr>
+<td><tt>$6d</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Diamond Key</tt></td>
+</tr>
+
+<tr>
+<td><tt>$6e</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Trapped Diamond</tt></td>
+</tr>
+
+<tr>
+<td><tt>$6f</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Gravestone with time penalty</tt></td>
+</tr>
+
+<tr>
+<td><tt>$70</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Waiting Boulder</tt></td>
+</tr>
+
+<tr>
+<td><tt>$71</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Waiting Boulder delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$72</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Chasing Boulder</tt></td>
+</tr>
+
+<tr>
+<td><tt>$73</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Chasing Boulder delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$74-$77</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Titanium Wall Birth stages</tt></td>
+</tr>
+
+<tr>
+<td><tt>$78-$7b</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Biter (up, right, down and left)</tt></td>
+</tr>
+
+<tr>
+<td><tt>$7c-$7f</tt></td>
+
+<td></td>
+
+<td COLSPAN="3"><tt>Biter delayed</tt></td>
+</tr>
+
+<tr>
+<td><tt>$80</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Pot</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$81</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Rockford steering</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$82</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Gravitation Switch</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$83</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Gravitation Switch delayed</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$84</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Pneumatic Hammer</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$85</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Pneumatic Hammer active</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$86</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Box</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$87</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Box delayed</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$8a</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Acid</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$8b</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Acid delayed</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$8c</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Key 1</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$8d</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Key 2</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$8e</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Key 3</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$95</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Teleporter</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$96</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Juice*</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$97</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Skeleton</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$98-$a8</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Water stages</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$a9-$ac</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Cow (left, up, right and down)</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$ad-$b0</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Cow delayed</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$b1-$b7</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Enclosed Cow</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$b8</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Non Eatable Dirt</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$b9</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Destuctible Titanium Wall</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$ba</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Door 1</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$bb</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Door 2</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$bc</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Door 3</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$bd</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Falling Wall</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$be</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Falling Wall falling</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$bf</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Falling Wall falling delayed</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$c0</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Walled Diamond</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$c1</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Walled Suice</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$c2</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Walled Key 1</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$c3</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Walled Key 2</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$c4</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Walled Key 3</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>$c8</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Alternative Dirt</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><tt>$e0-$e3</tt></td>
+
+<td style="vertical-align: top;"></td>
+
+<td style="vertical-align: top;"></td>
+
+<td style="vertical-align: top;"><tt>Alternative Firefly (left, up, right
+and down)</tt></td>
+
+<td style="vertical-align: top;"></td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><tt>$e4-$e7</tt></td>
+
+<td style="vertical-align: top;"></td>
+
+<td style="vertical-align: top;"></td>
+
+<td style="vertical-align: top;"><tt>Alternative Firefly delayed</tt></td>
+
+<td style="vertical-align: top;"></td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><tt>$e8-$eb</tt></td>
+
+<td style="vertical-align: top;"></td>
+
+<td style="vertical-align: top;"></td>
+
+<td style="vertical-align: top;"><tt>Alternative Butterfly (down, left,
+up and right)</tt></td>
+
+<td style="vertical-align: top;"></td>
+</tr>
+
+<tr>
+<td style="vertical-align: top;"><tt>$ec-$ef</tt></td>
+
+<td style="vertical-align: top;"></td>
+
+<td style="vertical-align: top;"></td>
+
+<td style="vertical-align: top;"><tt>Alternative Butterfly delayed</tt></td>
+
+<td style="vertical-align: top;"></td>
+</tr>
+
+<tr>
+<td><tt>$f0-$ff</tt></td>
+
+<td><tt></tt></td>
+
+<td><tt></tt></td>
+
+<td><tt>Water</tt></td>
+
+<td></td>
+</tr>
+</table>
+<tt>The Destructible Titanium Wall can appear as Non Eatable Dirt in some
+games.</tt>
+<br><tt>The Slime and Growing Wall was not originally implemented in <b>BD1</b>,
+but later added in some fan made games.</tt>
+<br><tt>Mrs. Rockford and Hidden Exits were introduced in <b>PLCK</b>.</tt>
+<br><tt>Falling Diamonds and Boulder have no effect on Mrs. Rockford in
+<b>PLCK</b>,
+and she can be destroyed.</tt>
+<br><tt>The Juice was not fully implemented. It is collectible, but has
+no effect on the game.</tt>
+<br><tt>The alternativ Fireflies and Butterflies can not walk backwards.</tt>
+<p><a NAME="Character sets"></a><b><tt><font size=+2>Character sets:</font></tt></b>
+<p><a NAME="The big letters logo is built of the chars"></a><tt><font size=+2>The
+big letters logo:</font></tt>
+<br><tt>It is built of the chars $00-$0b:</tt>
+<table BORDER >
+<tr>
+<td></td>
+
+<td><tt><b>BD1</b>, <b>PLCK</b></tt></td>
+
+<td><b><tt>CrLi</tt></b></td>
+
+<td><tt><b>Knib</b>, <b>1stB</b>, <b>CrDr</b></tt></td>
+
+<td><b><tt>BD2</tt></b></td>
+</tr>
+
+<tr>
+<td><tt>$00</tt></td>
+
+<td COLSPAN="4"><tt>scroll pattern target</tt></td>
+</tr>
+
+<tr>
+<td><tt>$01</tt></td>
+
+<td><tt>Color 1 area</tt></td>
+
+<td><tt>combined upper and lower slope target</tt></td>
+
+<td COLSPAN="2"><tt>Color 1 area</tt></td>
+</tr>
+
+<tr>
+<td><tt>$02</tt></td>
+
+<td><tt>Color 2 area</tt></td>
+
+<td><tt>scroll pattern above letter surface target</tt></td>
+
+<td COLSPAN="2"><tt>Color 2 area</tt></td>
+</tr>
+
+<tr>
+<td><tt>$03</tt></td>
+
+<td COLSPAN="4"><tt>Color 3 area (letter surface)</tt></td>
+</tr>
+
+<tr>
+<td><tt>$04</tt></td>
+
+<td><tt>Dollar sign</tt></td>
+
+<td><tt>scroll pattern left of letter shadow target</tt></td>
+
+<td><tt>cell upper left corner</tt></td>
+
+<td><tt>Brickwall</tt></td>
+</tr>
+
+<tr>
+<td><tt>$05</tt></td>
+
+<td><tt>Percent sign</tt></td>
+
+<td><tt>letter shadow above letter surface</tt></td>
+
+<td><tt>cell upper right corner</tt></td>
+
+<td><tt>Dollar sign</tt></td>
+</tr>
+
+<tr>
+<td><tt>$06</tt></td>
+
+<td COLSPAN="2"><tt>upper slope source</tt></td>
+
+<td><tt>cell lower left corner</tt></td>
+
+<td><tt>Percent sign</tt></td>
+</tr>
+
+<tr>
+<td><tt>$07</tt></td>
+
+<td COLSPAN="2"><tt>lower slope source</tt></td>
+
+<td><tt>cell lower right corner</tt></td>
+
+<td><tt>upper slope source</tt></td>
+</tr>
+
+<tr>
+<td><tt>$08</tt></td>
+
+<td COLSPAN="2"><tt>left edge with shadow</tt></td>
+
+<td><tt>cell horizintal bar</tt></td>
+
+<td><tt>lower slope source</tt></td>
+</tr>
+
+<tr>
+<td><tt>$09</tt></td>
+
+<td COLSPAN="2"><tt>upper slope target</tt></td>
+
+<td><tt>rotating scroll pattern sourse (<b>1stB</b> and onwards)</tt></td>
+
+<td><tt>upper slope target</tt></td>
+</tr>
+
+<tr>
+<td><tt>$0a</tt></td>
+
+<td COLSPAN="2"><tt>lower slope target</tt></td>
+
+<td><tt>rotating scroll pattern target (V3 and onwards)</tt></td>
+
+<td><tt>lower slope target</tt></td>
+</tr>
+
+<tr>
+<td><tt>$0b</tt></td>
+
+<td><tt>scroll pattern source</tt></td>
+
+<td><tt>rotating scroll pattern target</tt></td>
+
+<td COLSPAN="2"><tt>scroll pattern source</tt></td>
+</tr>
+</table>
+<tt>Even all No One Packer versions have the logo tiles. Unfortunately,
+you can't use them with it.</tt>
+<br><tt>Targets are animated tiles composed of the source tiles during
+run time.</tt>
+<br><tt>The vertical cell bars in the Knibble charsets are at $74 and $75.</tt>
+<p><a NAME="Two char wide"></a><tt><font size=+2>Two char wide letters:</font></tt>
+<br><tt>$0c: ,</tt>
+<br><tt>$0d: !</tt>
+<br><tt>$0e: .</tt>
+<br><tt>$0f: /</tt>
+<br><tt>$10: 0</tt>
+<br><tt>$11: 1</tt>
+<br><tt>$12: 2</tt>
+<br><tt>$13: 3</tt>
+<br><tt>$14: 4</tt>
+<br><tt>$15: 5</tt>
+<br><tt>$16: 6</tt>
+<br><tt>$17: 7</tt>
+<br><tt>$18: 8</tt>
+<br><tt>$19: 9</tt>
+<br><tt>$1a: :</tt>
+<br><tt>$1b: *</tt>
+<br><tt>$1c: &lt;</tt>
+<br><tt>$1d: =</tt>
+<br><tt>$1e: ></tt>
+<br><tt>$1f: triple line (tm sign in old games)</tt>
+<br><tt>$20: space</tt>
+<br><tt>$21: A</tt>
+<br><tt>$22: B</tt>
+<br><tt>$23: C</tt>
+<br><tt>$24: D</tt>
+<br><tt>$25: E</tt>
+<br><tt>$26: F</tt>
+<br><tt>$27: G</tt>
+<br><tt>$28: H</tt>
+<br><tt>$29: I</tt>
+<br><tt>$2a: J</tt>
+<br><tt>$2b: K</tt>
+<br><tt>$2c: L</tt>
+<br><tt>$2d: M</tt>
+<br><tt>$2e: N</tt>
+<br><tt>$2f: O</tt>
+<br><tt>$30: P</tt>
+<br><tt>$31: Q</tt>
+<br><tt>$32: R</tt>
+<br><tt>$33: S</tt>
+<br><tt>$34: T</tt>
+<br><tt>$35: U</tt>
+<br><tt>$36: V</tt>
+<br><tt>$37: W</tt>
+<br><tt>$38: X</tt>
+<br><tt>$39: Y</tt>
+<br><tt>$3a: Z</tt>
+<br><tt>$3b: (</tt>
+<br><tt>$3c: Diamond</tt>
+<br><tt>$3d: )</tt>
+<br><tt>$3e: Rockford's head</tt>
+<br><tt>$3f: _</tt>
+<br><tt>$40-$73: Letter's right half (see bellow!)</tt>
+<br><tt>$74: left vertical cell bar in Knibble sets</tt>
+<br><tt>$75: right vertical cell bar in Knibble sets</tt>
+<br><tt>$76, $77: ? (see bellow!)</tt>
+<p><tt>In Boulder Dash the letters are two chars wide. For the right half
+of
+it, the engine adds $34 to the first half. In the title screen, this is
+done in the editor which makes it possible to place the letters in steps
+half the size of a letter. For the ingame texts, only the left half is
+stored and the right half is added on the fly.</tt>
+<br><tt>Prof. Knibble later added the Question mark, though with the $34
+rule, the space was used up. He placed it at the end and the rule does
+not apply as the char codes are $76 and $77.</tt>
+<p><a NAME="Graphic character"></a><tt><font size=+2>Graphic character
+set:</font></tt>
+<table BORDER >
+<tr>
+<td></td>
+
+<td><b><tt>PLCK</tt></b></td>
+
+<td><b><tt>1stB</tt></b></td>
+
+<td><b><tt>CrLi</tt></b></td>
+</tr>
+
+<tr>
+<td><tt>2600-2700</tt></td>
+
+<td></td>
+
+<td><tt>Ghost</tt></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>26a0-2700</tt></td>
+
+<td></td>
+
+<td></td>
+
+<td><tt>Rockford standing still</tt>
+<br><tt>Bomb status bar sprite</tt></td>
+</tr>
+
+<tr>
+<td><tt>2700-2800</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Biter</tt></td>
+</tr>
+
+<tr>
+<td><tt>2800-2bb0</tt></td>
+
+<td COLSPAN="3"><tt>(Text chars, see above!)</tt></td>
+</tr>
+
+<tr>
+<td><tt>2bb0-2c00</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>(extended text chars)</tt></td>
+</tr>
+
+<tr>
+<td><tt>2bb0-2cb0</tt></td>
+
+<td><tt>Firefly</tt></td>
+
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>2cb0-2db0</tt></td>
+
+<td><tt>Diamond</tt></td>
+
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>2c00-2c80</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Magic Wall</tt></td>
+</tr>
+
+<tr>
+<td><tt>2c80-2d00</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Biter switch</tt></td>
+</tr>
+
+<tr>
+<td><tt>2d00-2e00</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Rockford blinking and stamping</tt></td>
+</tr>
+
+<tr>
+<td><tt>2db0-3000</tt></td>
+
+<td><tt>unused</tt></td>
+
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>2e00-2f00</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Bladder</tt></td>
+</tr>
+
+<tr>
+<td><tt>2f00-3000</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Slime</tt></td>
+</tr>
+
+<tr>
+<td><tt>3000-3100</tt></td>
+
+<td><tt>(Title music)</tt></td>
+
+<td COLSPAN="2"><tt>Slime target</tt>
+<br><tt>Enemy switch forward</tt>
+<br><tt>Enemy switch backwards</tt>
+<br><tt>Growing wall switch horizontal</tt>
+<br><tt>Growing wall switch vertical</tt>
+<br><tt>T</tt>
+<br><tt>Bladder target</tt>
+<br><tt>Clock</tt></td>
+</tr>
+
+<tr>
+<td><tt>3100-3200</tt></td>
+
+<td COLSPAN="2"><tt>Butterfly target</tt>
+<br><tt>Magic Wall Target</tt>
+<br><tt>Diamond birth stage 1</tt>
+<br><tt>Diamond birth stage 2</tt>
+<br><tt>Diamond birth stage 3</tt>
+<br><tt>Diamond birth stage 4</tt>
+<br><tt>Diamond birth stage 5</tt>
+<br><tt>In/Out Box full</tt></td>
+
+<td><tt><font color="#666666">Butterfly target</font></tt>
+<br><tt><font color="#666666">Magic Wall Target</font></tt>
+<br><tt><font color="#666666">Diamond birth stage 1</font></tt>
+<br><tt><font color="#666666">Diamond birth stage 2</font></tt>
+<br><tt><font color="#666666">Diamond birth stage 3</font></tt>
+<br><tt><font color="#666666">Diamond birth stage 4</font></tt>
+<br><tt><font color="#666666">Diamond birth stage 5</font></tt>
+<br><tt>Titanium Wall and In/Out Box full</tt></td>
+</tr>
+
+<tr>
+<td><tt>3200-3300</tt></td>
+
+<td COLSPAN="2"><tt>Amoeba target</tt>
+<br><tt>Rockford standing still or Mrs. Rockford (see below!)</tt>
+<br><tt>Boulder</tt>
+<br><tt>Dirt (target, see below!)</tt>
+<br><tt>Diamond Target</tt>
+<br><tt>Titanium Wall</tt>
+<br><tt>Rockford target</tt>
+<br><tt>Brick Wall</tt></td>
+
+<td><tt><font color="#666666">Amoeba target</font></tt>
+<br><tt>Mrs. Rockford</tt>
+<br><tt><font color="#666666">Boulder</font></tt>
+<br><tt>Dirt</tt>
+<br><tt><font color="#666666">Diamond Target</font></tt>
+<br><tt>Pushable box</tt>
+<br><tt><font color="#666666">Rockford target</font></tt>
+<br><tt><font color="#666666">Brick Wall</font></tt></td>
+</tr>
+
+<tr>
+<td><tt>3300-3400</tt></td>
+
+<td><tt>Space</tt>
+<br><tt>In/Out Box empty</tt>
+<br><tt>Firefly target</tt>
+<br><tt>Explosion stage 1</tt>
+<br><tt>Explosion stage 2</tt>
+<br><tt>Explosion stage 3</tt>
+<br><tt>Magic Wall stages 1 &amp; 2 + disolve pattern source</tt>
+<br><tt>Magic Wall stages 3 &amp; 4</tt></td>
+
+<td><tt><font color="#666666">Space</font></tt>
+<br><tt><font color="#666666">In/Out Box empty</font></tt>
+<br><tt><font color="#666666">Firefly target</font></tt>
+<br><tt><font color="#666666">Explosion stage 1</font></tt>
+<br><tt><font color="#666666">Explosion stage 2</font></tt>
+<br><tt><font color="#666666">Explosion stage 3</font></tt>
+<br><tt>Disolve pattern source</tt>
+<br><tt>Bomb</tt></td>
+
+<td><tt><font color="#666666">Space</font></tt>
+<br><tt><font color="#666666">In/Out Box empty</font></tt>
+<br><tt><font color="#666666">Firefly target</font></tt>
+<br><tt><font color="#666666">Explosion stage 1</font></tt>
+<br><tt><font color="#666666">Explosion stage 2</font></tt>
+<br><tt><font color="#666666">Explosion stage 3</font></tt>
+<br><tt>Disolve and title scroll patterns source</tt>
+<br><tt>Bomb</tt></td>
+</tr>
+
+<tr>
+<td><tt>3400-3500</tt></td>
+
+<td><tt>Rockford blinking and stamping</tt></td>
+
+<td><tt>Sweet</tt>
+<br><tt>Ghost target</tt>
+<br><tt>Cross</tt>
+<br><tt>Diamond release key</tt>
+<br><tt>Trapped diamond</tt>
+<br><tt>Chasing Boulder</tt>
+<br><tt>Biter target</tt>
+<br><tt>Biter switch target</tt></td>
+
+<td><tt><font color="#666666">Sweet</font></tt>
+<br><tt>Acid</tt>
+<br><tt><font color="#666666">Cross</font></tt>
+<br><tt><font color="#666666">Diamond release key</font></tt>
+<br><tt><font color="#666666">Trapped diamond</font></tt>
+<br><tt><font color="#666666">Chasing Boulder</font></tt>
+<br><tt><font color="#666666">Biter target</font></tt>
+<br><tt><font color="#666666">Biter switch target</font></tt></td>
+</tr>
+
+<tr>
+<td><tt>3500-3600</tt></td>
+
+<td COLSPAN="3"><tt>Rockford left</tt></td>
+</tr>
+
+<tr>
+<td><tt>3600-3700</tt></td>
+
+<td COLSPAN="3"><tt>Rockford right</tt></td>
+</tr>
+
+<tr>
+<td><tt>3700-3800</tt></td>
+
+<td COLSPAN="3"><tt>Butterfly</tt></td>
+</tr>
+
+<tr>
+<td><tt>3800-3900</tt></td>
+
+<td COLSPAN="3"><tt>Amoeba</tt></td>
+</tr>
+
+<tr>
+<td><tt>3900-3a00</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Firefly</tt></td>
+</tr>
+
+<tr>
+<td><tt>3a00-3b00</tt></td>
+
+<td></td>
+
+<td COLSPAN="2"><tt>Diamond</tt></td>
+</tr>
+</table>
+<tt>No One and Prof. Knibble changed the "Rockford standing still" to "Mrs.
+Rockford". Originally the engine uses parts of it when Rockford is standing.
+This was changed to use the first image from the "Rockford blinking and
+stamping" animation, though he can not hang his arms anymore. In "De Luxe
+Packer 1.4x" this was made optional. In <b>CrLi</b> a separate "Rockford
+standing still" image was reinplemented independently from "Mrs. Rockford".</tt>
+<br><tt><b>BD2</b> introduced the Dirt-Mod. Whenever a cave features an
+amoeba, the dirt is replaces with one where color 1 and color 2 are swapped,
+so the amoeba (which has the color of the dirt in <b>BD2</b> instead of
+the brick wall like in <b>BD1</b>) can be better distinguished from dirt,
+though now dirt, titanium wall and boulders have mostly the same color
+now. Also you can not use your own dirt in No One's Enemiedesigner when
+the Dirt-Mod is enabled. Most No One and Knibblepacker used this Mod. Rockford
+removed it in the Profi Boulder series. Also it was abandoned in <b>1stB</b>.</tt>
+</body>
+</html>
