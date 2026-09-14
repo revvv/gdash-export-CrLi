@@ -1906,8 +1906,8 @@ int C64Import::cave_copy_from_crli(CaveStored &cave, const guint8 *data, int rem
         cave.y2 = 11;
     }
 
-    cave.amoeba_growth_prob = amoeba_probability(data[0x382]);
-    cave.amoeba_fast_growth_prob = amoeba_probability(data[0x383]);
+    cave.amoeba_growth_prob = amoeba_probability(uncompressed[0x382]);
+    cave.amoeba_fast_growth_prob = amoeba_probability(uncompressed[0x383]);
     /* 2c was a normal switch, 2d a changed one. */
     cave.creatures_backwards = uncompressed[0x38f] == 0x2d;
     cave.magic_wall_sound = uncompressed[0x38d] == 0xf1;
